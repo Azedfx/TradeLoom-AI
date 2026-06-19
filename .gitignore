@@ -1,3 +1,5 @@
 .env
 trade-agent
 api
+trade_log.csv
+backtest_report.txt
