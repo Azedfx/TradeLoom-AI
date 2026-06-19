@@ -1,6 +1,8 @@
 package store
 
 import (
+	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -11,12 +13,25 @@ type MemoryStore struct {
 	mu         sync.RWMutex
 	strategies map[string]*models.Strategy
 	trades     []models.Trade
+	logFile    *os.File
 }
 
-func NewMemoryStore() *MemoryStore {
-	return &MemoryStore{
+func NewMemoryStore(logPath string) *MemoryStore {
+	s := &MemoryStore{
 		strategies: make(map[string]*models.Strategy),
 	}
+
+	f, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err == nil {
+		s.logFile = f
+		// Write header if file is empty
+		info, _ := f.Stat()
+		if info.Size() == 0 {
+			fmt.Fprintln(f, "timestamp,symbol,direction,price,quantity,pnl,status")
+		}
+	}
+
+	return s
 }
 
 func (s *MemoryStore) SaveStrategy(strategy *models.Strategy) {
@@ -61,18 +76,27 @@ func (s *MemoryStore) GetOpenPositions() []models.Trade {
 
 func (s *MemoryStore) CloseTrade(id string, exitPrice, pnl float64) {
 	s.mu.Lock()
-	defer s.mu.Unlock()
 	for i := range s.trades {
 		if s.trades[i].ID == id {
 			s.trades[i].Status = "CLOSED"
 			s.trades[i].PnL = pnl
+			t := s.trades[i]
+			s.mu.Unlock()
+
+			// Append close row to CSV
+			if s.logFile != nil {
+				fmt.Fprintf(s.logFile, "%s,%s,close,%.8f,%.8f,%.2f,%s\n",
+					time.Now().Format("2006-01-02 15:04:05"),
+					t.Symbol, exitPrice, t.Size, pnl, "CLOSED")
+			}
 			return
 		}
 	}
+	s.mu.Unlock()
 }
 
 func (s *MemoryStore) LogTrade(symbol, side string, size, price, pnl float64, status string) {
-	s.AddTrade(models.Trade{
+	t := models.Trade{
 		ID:        time.Now().Format("20060102150405"),
 		Symbol:    symbol,
 		Side:      side,
@@ -81,7 +105,20 @@ func (s *MemoryStore) LogTrade(symbol, side string, size, price, pnl float64, st
 		PnL:       pnl,
 		Status:    status,
 		CreatedAt: time.Now(),
-	})
+	}
+	s.AddTrade(t)
+	s.appendToLog(t)
+}
+
+func (s *MemoryStore) appendToLog(t models.Trade) {
+	if s.logFile == nil {
+		return
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	fmt.Fprintf(s.logFile, "%s,%s,%s,%.8f,%.8f,%.2f,%s\n",
+		t.CreatedAt.Format("2006-01-02 15:04:05"),
+		t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.Status)
 }
 
 func (s *MemoryStore) GetAllTrades() []models.Trade {
