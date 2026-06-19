@@ -248,3 +248,26 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 		"winRate":    h.store.CalculateWinRate(),
 	})
 }
+
+func (h *StrategyHandler) ListTrades(c *gin.Context) {
+	trades := h.store.GetAllTrades()
+	c.JSON(http.StatusOK, gin.H{
+		"trades": trades,
+		"count":  len(trades),
+	})
+}
+
+func (h *StrategyHandler) ExportTradesCSV(c *gin.Context) {
+	trades := h.store.GetAllTrades()
+	c.Header("Content-Type", "text/csv")
+	c.Header("Content-Disposition", "attachment; filename=trade_log.csv")
+
+	var b strings.Builder
+	b.WriteString("timestamp,symbol,direction,price,quantity,pnl,status\n")
+	for _, t := range trades {
+		b.WriteString(fmt.Sprintf("%s,%s,%s,%.8f,%.8f,%.2f,%s\n",
+			t.CreatedAt.Format("2006-01-02 15:04:05"),
+			t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.Status))
+	}
+	c.String(http.StatusOK, b.String())
+}

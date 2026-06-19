@@ -130,6 +130,22 @@ GET /api/v1/dashboard
 
 Returns all strategies, trade history, total PnL, and win rate.
 
+### List Trades
+
+```
+GET /api/v1/trades
+```
+
+Returns all executed trades with timestamps, direction, price, size, and PnL.
+
+### Export Trades (CSV)
+
+```
+GET /api/v1/trades/export
+```
+
+Downloads a CSV file with full trading history — suitable for submission as a paper trading log.
+
 ## Demo
 
 ```bash
@@ -138,15 +154,42 @@ Returns all strategies, trade history, total PnL, and win rate.
 
 Runs the full 5-step flow: prompt → strategy creation → market analysis → AI decision → risk management → execution.
 
-## Backtest
+## Paper Trading Log
 
-Backtesting is available as an optional supplementary module. Run the backtest script and review the generated report:
+While the server is running, export your trade history:
 
 ```bash
-# TODO: backtest script and notebook
+bash export_trades.sh
 ```
 
-The goal is to reproduce historical performance using the same decision engine logic.
+Output: `trade_log.csv` with columns: `timestamp,symbol,direction,price,quantity,pnl,status`
+
+Example row:
+```
+2026-06-19 16:23:58,ONDOUSDT,buy,0.68000000,29.41176471,0.00,OPEN
+```
+
+This satisfies the submission requirement for a live/paper trading record.
+
+## Backtest
+
+Run a historical backtest using the same technical indicators (RSI, SMA trend, momentum) that the decision engine uses:
+
+```bash
+bash run_backtest.sh BTCUSDT
+```
+
+Output: `backtest_report.txt` with trade log, win rate, total return, and max drawdown.
+
+The backtest simulates entry on bullish trend + RSI 40-70 + positive momentum, and exits on bearish trend / RSI > 80 / +5% TP / -2% SL. Note that the full AI system also factors in sentiment, news, and macro data for higher confidence.
+
+## Submission Checklist
+
+- [x] **Project description** — covered above, under 200 words
+- [x] **GitHub repo** — public with complete README
+- [x] **Paper trading log** — `bash export_trades.sh` → `trade_log.csv`
+- [x] **Backtest report** — `bash run_backtest.sh` → `backtest_report.txt`
+- [ ] **Demo video** — optional, max 3 minutes
 
 ## License
 
