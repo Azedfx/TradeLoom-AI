@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeLoom AI — Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0c10; color: #e0e4ec; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+  h1 { font-size: 24px; background: linear-gradient(135deg, #6366f1, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  h1 small { font-size: 12px; color: #6b7280; -webkit-text-fill-color: #6b7280; display: block; }
+  .badge { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge-demo { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: #13161c; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; }
+  .card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin-bottom: 8px; }
+  .card-value { font-size: 28px; font-weight: 700; }
+  .card-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .green { color: #22c55e; } .red { color: #ef4444; } .yellow { color: #f59e0b; } .blue { color: #6366f1; } .cyan { color: #06b6d4; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; border-bottom: 1px solid #1e293b; }
+  td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+  .status-open { color: #22c55e; } .status-closed { color: #6b7280; } .status-buy { color: #22c55e; } .status-sell { color: #ef4444; }
+  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .loading { text-align: center; padding: 40px; color: #6b7280; }
+  .error { text-align: center; padding: 40px; color: #ef4444; }
+  .mt-24 { margin-top: 24px; }
+  .flex { display: flex; gap: 8px; align-items: center; }
+  .signal-bar { display: flex; gap: 4px; margin-top: 8px; }
+  .signal-segment { height: 6px; border-radius: 3px; flex: 1; }
+  .sig-filled { background: #6366f1; } .sig-empty { background: #1e293b; }
+  .chart-placeholder { height: 80px; display: flex; align-items: flex-end; gap: 2px; padding: 8px 0; }
+  .chart-bar { flex: 1; background: #6366f1; border-radius: 2px 2px 0 0; min-height: 4px; opacity: 0.7; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <header>
+    <div>
+      <h1>TradeLoom AI <small>Built for Bitget AI Base Camp Hackathon S1 2026</small></h1>
+    </div>
+    <div class="flex">
+      <span class="badge badge-demo" id="mode-badge">DEMO</span>
+      <span class="badge badge-demo">LIVE</span>
+    </div>
+  </header>
+
+  <div class="grid" id="metrics">
+    <div class="card"><div class="card-label">Win Rate</div><div class="card-value cyan" id="win-rate">—</div><div class="card-sub">of closed trades</div></div>
+    <div class="card"><div class="card-label">Total PnL</div><div class="card-value" id="total-pnl">—</div><div class="card-sub">realized</div></div>
+    <div class="card"><div class="card-label">Trades</div><div class="card-value blue" id="trade-count">—</div><div class="card-sub"><span id="open-count">0</span> open · <span id="closed-count">0</span> closed</div></div>
+    <div class="card"><div class="card-label">Avg Confidence</div><div class="card-value yellow" id="avg-confidence">—</div><div class="card-sub">last signal</div></div>
+    <div class="card"><div class="card-label">Health Score</div><div class="card-value" id="health-score">—</div><div class="card-sub">win rate × confidence</div></div>
+    <div class="card"><div class="card-label">Last Decision</div><div class="card-value" id="last-decision" style="font-size:18px;">—</div><div class="card-sub" id="last-decision-time"></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="section-title">📋 Trade History</div>
+      <div id="trade-table"><div class="loading">Waiting for trades...</div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">📊 Signal Components</div>
+      <div id="signals"><div class="loading">Waiting for signal data...</div></div>
+      <div class="section-title mt-24">🕐 Recent Decisions</div>
+      <div id="recent-decisions"><div class="loading">No decisions yet...</div></div>
+    </div>
+  </div>
+
+  <div class="card mt-24">
+    <div class="section-title">📡 API Endpoints</div>
+    <table>
+      <tr><td><code>GET /api/v1/dashboard</code></td><td>Full dashboard data</td></tr>
+      <tr><td><code>GET /api/v1/trades</code></td><td>All trades</td></tr>
+      <tr><td><code>GET /api/v1/trades/export</code></td><td>CSV download</td></tr>
+      <tr><td><code>POST /api/v1/strategies</code></td><td>Create strategy</td></tr>
+      <tr><td><code>POST /api/v1/strategies/:id/execute</code></td><td>Execute strategy</td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+async function loadDashboard() {
+  try {
+    const res = await fetch('/api/v1/dashboard');
+    const data = await res.json();
+    renderMetrics(data);
+    renderTrades(data.trades || []);
+  } catch (e) {
+    document.getElementById('metrics').innerHTML = '<div class="error">Cannot connect to server</div>';
+  }
+}
+
+function renderMetrics(data) {
+  const trades = data.trades || [];
+  const closed = trades.filter(t => t.status === 'CLOSED');
+  const open = trades.filter(t => t.status === 'OPEN');
+  const totalPnl = data.totalPnL || 0;
+  const winRate = data.winRate || 0;
+
+  document.getElementById('win-rate').textContent = winRate ? winRate.toFixed(1) + '%' : '0%';
+  const pnlEl = document.getElementById('total-pnl');
+  pnlEl.textContent = '$' + totalPnl.toFixed(2);
+  pnlEl.className = 'card-value ' + (totalPnl >= 0 ? 'green' : 'red');
+
+  document.getElementById('trade-count').textContent = trades.length;
+  document.getElementById('open-count').textContent = open.length;
+  document.getElementById('closed-count').textContent = closed.length;
+
+  // Average confidence from trade decision scores
+  const confidences = [];
+  trades.forEach(t => { if (t.confidence) confidences.push(t.confidence); });
+  const avgConf = confidences.length ? confidences.reduce((a,b)=>a+b,0)/confidences.length : 0;
+  document.getElementById('avg-confidence').textContent = avgConf ? avgConf.toFixed(1) : '—';
+
+  const health = (winRate * (avgConf / 100)) / 100 * 100;
+  const healthEl = document.getElementById('health-score');
+  healthEl.textContent = health ? health.toFixed(1) : '—';
+  healthEl.className = 'card-value ' + (health > 50 ? 'green' : health > 25 ? 'yellow' : 'red');
+
+  // Last decision from most recent trade
+  if (trades.length > 0) {
+    const last = trades[trades.length - 1];
+    document.getElementById('last-decision').textContent = last.status === 'OPEN' ? 'BUY' : 'CLOSED';
+    document.getElementById('last-decision').className = 'card-value ' + (last.status === 'OPEN' ? 'green' : '');
+    document.getElementById('last-decision-time').textContent = last.created_at || '';
+  }
+
+  // Mode badge
+  const modeEl = document.getElementById('mode-badge');
+  if (data.mode) modeEl.textContent = data.mode.toUpperCase();
+}
+
+function renderTrades(trades) {
+  const container = document.getElementById('trade-table');
+  if (!trades || trades.length === 0) {
+    container.innerHTML = '<div class="loading">No trades yet — run the demo to see results here</div>';
+    return;
+  }
+
+  const reversed = [...trades].reverse().slice(0, 20);
+  let html = '<table><tr><th>Time</th><th>Pair</th><th>Side</th><th>Price</th><th>Size</th><th>PnL</th><th>Status</th></tr>';
+  reversed.forEach(t => {
+    const ts = t.created_at ? new Date(t.created_at).toLocaleString() : t.id || '—';
+    const pnl = t.pnl || 0;
+    html += `<tr>
+      <td>${ts}</td>
+      <td>${t.symbol || '—'}</td>
+      <td class="status-${t.side === 'buy' ? 'buy' : 'sell'}">${(t.side || '—').toUpperCase()}</td>
+      <td>$${(t.price || 0).toFixed(4)}</td>
+      <td>${(t.size || 0).toFixed(4)}</td>
+      <td class="${pnl >= 0 ? 'green' : 'red'}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+      <td class="status-${t.status === 'OPEN' ? 'open' : 'closed'}">${t.status || '—'}</td>
+    </tr>`;
+  });
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+loadDashboard();
+setInterval(loadDashboard, 5000);
+</script>
+</body>
+</html>

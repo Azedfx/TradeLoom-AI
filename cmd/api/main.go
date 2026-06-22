@@ -46,8 +46,14 @@ func main() {
 	)
 
 	r := gin.Default()
+	r.LoadHTMLGlob("templates/*.html")
 	api.RegisterRoutes(r, handler)
 
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(200, "dashboard.html", nil)
+	})
+
 	log.Printf("server starting on %s (%s mode)", cfg.Port, cfg.TradeMode)
-	r.Run(":" + cfg.Port)
+	log.Printf("dashboard → http://localhost%s", cfg.Port)
+	r.Run(cfg.Port)
 }

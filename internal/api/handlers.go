@@ -246,6 +246,7 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 		"trades":     trades,
 		"totalPnL":   h.store.CalculatePnL(),
 		"winRate":    h.store.CalculateWinRate(),
+		"mode":       h.tradeMode,
 	})
 }
 

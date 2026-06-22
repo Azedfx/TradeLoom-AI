@@ -146,6 +146,12 @@ GET /api/v1/trades/export
 
 Downloads a CSV file with full trading history — suitable for submission as a paper trading log.
 
+## Dashboard
+
+Open **http://localhost:8040** in your browser after starting the server.
+
+Shows live metrics: win rate, PnL, trade history, open/closed positions, signal components, and health score. Auto-refreshes every 5 seconds.
+
 ## Demo
 
 ```bash
