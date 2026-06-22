@@ -1,45 +1,32 @@
 package bitget
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"os/exec"
+	"io"
+	"net/http"
 )
 
 type MarketData struct{}
 
 func (m *MarketData) GetTechnicalAnalysis(symbol string) (map[string]interface{}, error) {
-	cmd := exec.Command("bgc", "spot", "spot_get_ticker", "--symbol", symbol)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-
-	err := cmd.Run()
+	url := fmt.Sprintf("https://api.bitget.com/api/v2/spot/market/ticker?symbol=%s", symbol)
+	resp, err := http.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("bgc failed: %v, stderr: %s", err, stderr.String())
+		return nil, fmt.Errorf("ticker request: %w", err)
 	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
 
 	var raw struct {
 		Data []map[string]interface{} `json:"data"`
 	}
-	if err := json.Unmarshal(stdout.Bytes(), &raw); err != nil {
-		return nil, fmt.Errorf("unmarshal ticker: %w, raw: %s", err, stdout.String())
+	if err := json.Unmarshal(body, &raw); err != nil {
+		return nil, fmt.Errorf("unmarshal ticker: %w, raw: %s", err, string(body))
 	}
 	if len(raw.Data) == 0 {
 		return nil, fmt.Errorf("no ticker data for %s", symbol)
 	}
 	return raw.Data[0], nil
-}
-
-func (m *MarketData) GetSentiment(topic string) (map[string]interface{}, error) {
-	cmd := exec.Command("bgc", "market", "sentiment", "--topic", topic)
-	output, err := cmd.Output()
-	if err != nil {
-		return nil, err
-	}
-
-	var result map[string]interface{}
-	json.Unmarshal(output, &result)
-	return result, nil
 }
