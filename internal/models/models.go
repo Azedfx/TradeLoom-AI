@@ -67,6 +67,18 @@ type SignalScore struct {
 	Reason string  `json:"reason"`
 }
 
+type DecisionRecord struct {
+	Time      time.Time     `json:"time"`
+	Symbol    string        `json:"symbol"`
+	Total     float64       `json:"total"`
+	Decision  string        `json:"decision"`
+	Sentiment float64       `json:"sentiment"`
+	Technical float64       `json:"technical"`
+	Volume    float64       `json:"volume"`
+	News      float64       `json:"news"`
+	Macro     float64       `json:"macro"`
+}
+
 type ConfidenceScore struct {
 	Total     float64       `json:"total"`
 	Signals   []SignalScore `json:"signals"`

@@ -10,10 +10,11 @@ import (
 )
 
 type MemoryStore struct {
-	mu         sync.RWMutex
-	strategies map[string]*models.Strategy
-	trades     []models.Trade
-	logFile    *os.File
+	mu            sync.RWMutex
+	strategies    map[string]*models.Strategy
+	trades        []models.Trade
+	decisionLog   []models.DecisionRecord
+	logFile       *os.File
 }
 
 func NewMemoryStore(logPath string) *MemoryStore {
@@ -149,4 +150,38 @@ func (s *MemoryStore) CalculateWinRate() float64 {
 		}
 	}
 	return float64(wins) / float64(len(trades)) * 100
+}
+
+func (s *MemoryStore) LogDecision(symbol string, total float64, decision string, signals []models.SignalScore) {
+	r := models.DecisionRecord{
+		Time:     time.Now(),
+		Symbol:   symbol,
+		Total:    total,
+		Decision: decision,
+	}
+	for _, sig := range signals {
+		switch sig.Name {
+		case "Sentiment":
+			r.Sentiment = sig.Score
+		case "Technical":
+			r.Technical = sig.Score
+		case "Volume":
+			r.Volume = sig.Score
+		case "News":
+			r.News = sig.Score
+		case "Macro":
+			r.Macro = sig.Score
+		}
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.decisionLog = append(s.decisionLog, r)
+}
+
+func (s *MemoryStore) GetDecisionLog() []models.DecisionRecord {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	result := make([]models.DecisionRecord, len(s.decisionLog))
+	copy(result, s.decisionLog)
+	return result
 }

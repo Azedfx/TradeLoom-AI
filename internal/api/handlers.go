@@ -149,6 +149,7 @@ func (h *StrategyHandler) ExecuteStrategy(c *gin.Context) {
 	}
 
 	confidence := h.decisionEngine.EvaluateWithConfidence(perception)
+	h.store.LogDecision(ticker, confidence.Total, confidence.Decision, confidence.Signals)
 
 	explain := h.decisionEngine.Explain(ticker, confidence)
 
@@ -241,12 +242,14 @@ func (h *StrategyHandler) GetStrategyStatus(c *gin.Context) {
 func (h *StrategyHandler) Dashboard(c *gin.Context) {
 	strategies := h.store.GetAllStrategies()
 	trades := h.store.GetAllTrades()
+	decisions := h.store.GetDecisionLog()
 	c.JSON(http.StatusOK, gin.H{
-		"strategies": strategies,
-		"trades":     trades,
-		"totalPnL":   h.store.CalculatePnL(),
-		"winRate":    h.store.CalculateWinRate(),
-		"mode":       h.tradeMode,
+		"strategies":  strategies,
+		"trades":      trades,
+		"decisions":   decisions,
+		"totalPnL":    h.store.CalculatePnL(),
+		"winRate":     h.store.CalculateWinRate(),
+		"mode":        h.tradeMode,
 	})
 }
 

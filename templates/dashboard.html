@@ -66,8 +66,8 @@
     <div class="card">
       <div class="section-title">📊 Signal Components</div>
       <div id="signals"><div class="loading">Waiting for signal data...</div></div>
-      <div class="section-title mt-24">🕐 Recent Decisions</div>
-      <div id="recent-decisions"><div class="loading">No decisions yet...</div></div>
+      <div class="section-title mt-24">🕐 AI Decision History</div>
+      <div id="decision-history"><div class="loading">No decisions yet...</div></div>
     </div>
   </div>
 
@@ -90,6 +90,7 @@ async function loadDashboard() {
     const data = await res.json();
     renderMetrics(data);
     renderTrades(data.trades || []);
+    renderDecisions(data.decisions || []);
   } catch (e) {
     document.getElementById('metrics').innerHTML = '<div class="error">Cannot connect to server</div>';
   }
@@ -97,6 +98,7 @@ async function loadDashboard() {
 
 function renderMetrics(data) {
   const trades = data.trades || [];
+  const decisions = data.decisions || [];
   const closed = trades.filter(t => t.status === 'CLOSED');
   const open = trades.filter(t => t.status === 'OPEN');
   const totalPnl = data.totalPnL || 0;
@@ -106,42 +108,117 @@ function renderMetrics(data) {
   const pnlEl = document.getElementById('total-pnl');
   pnlEl.textContent = '$' + totalPnl.toFixed(2);
   pnlEl.className = 'card-value ' + (totalPnl >= 0 ? 'green' : 'red');
-
   document.getElementById('trade-count').textContent = trades.length;
   document.getElementById('open-count').textContent = open.length;
   document.getElementById('closed-count').textContent = closed.length;
 
-  // Average confidence from trade decision scores
-  const confidences = [];
-  trades.forEach(t => { if (t.confidence) confidences.push(t.confidence); });
-  const avgConf = confidences.length ? confidences.reduce((a,b)=>a+b,0)/confidences.length : 0;
+  // Average confidence from decisions
+  const confs = decisions.map(d => d.total).filter(c => c > 0);
+  const avgConf = confs.length ? confs.reduce((a,b)=>a+b,0) / confs.length : 0;
   document.getElementById('avg-confidence').textContent = avgConf ? avgConf.toFixed(1) : '—';
 
-  const health = (winRate * (avgConf / 100)) / 100 * 100;
+  const health = confs.length ? (winRate * (avgConf / 100)) : 0;
   const healthEl = document.getElementById('health-score');
-  healthEl.textContent = health ? health.toFixed(1) : '—';
+  healthEl.textContent = health ? Math.min(health, 100).toFixed(1) : '—';
   healthEl.className = 'card-value ' + (health > 50 ? 'green' : health > 25 ? 'yellow' : 'red');
 
-  // Last decision from most recent trade
-  if (trades.length > 0) {
-    const last = trades[trades.length - 1];
-    document.getElementById('last-decision').textContent = last.status === 'OPEN' ? 'BUY' : 'CLOSED';
-    document.getElementById('last-decision').className = 'card-value ' + (last.status === 'OPEN' ? 'green' : '');
-    document.getElementById('last-decision-time').textContent = last.created_at || '';
+  // Last decision from decision log
+  if (decisions.length > 0) {
+    const last = decisions[decisions.length - 1];
+    document.getElementById('last-decision').textContent = last.decision + ' (' + last.total.toFixed(0) + ')';
+    document.getElementById('last-decision').className = 'card-value ' +
+      (last.decision === 'BUY' ? 'green' : last.decision === 'WATCHLIST' ? 'yellow' : 'red');
+    document.getElementById('last-decision-time').textContent = last.symbol + ' · ' + new Date(last.time).toLocaleString();
   }
 
   // Mode badge
   const modeEl = document.getElementById('mode-badge');
   if (data.mode) modeEl.textContent = data.mode.toUpperCase();
+
+  // Signal bars
+  renderSignals(decisions);
+}
+
+function renderSignals(decisions) {
+  const container = document.getElementById('signals');
+  if (!decisions.length) {
+    container.innerHTML = '<div style="color:#6b7280;font-size:13px;">Run the demo to see signal breakdowns</div>';
+    return;
+  }
+  const last = decisions[decisions.length - 1];
+  const maxScore = 30 + 30 + 20 + 20 + 10; // 110
+  const total = last.sentiment + last.technical + last.volume + last.news + last.macro;
+  const pct = Math.min((total / maxScore) * 100, 100);
+
+  let html = `<div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+    <span style="font-size:13px;">Sentiment</span>
+    <span style="font-size:13px;color:#6366f1;">+${last.sentiment.toFixed(0)}</span>
+  </div>
+  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
+    <div style="height:6px;width:${Math.min((last.sentiment/30)*100,100)}%;background:#6366f1;border-radius:3px;"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+    <span style="font-size:13px;">Technical</span>
+    <span style="font-size:13px;color:#06b6d4;">+${last.technical.toFixed(0)}</span>
+  </div>
+  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
+    <div style="height:6px;width:${Math.min((last.technical/30)*100,100)}%;background:#06b6d4;border-radius:3px;"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+    <span style="font-size:13px;">Volume</span>
+    <span style="font-size:13px;color:#22c55e;">+${last.volume.toFixed(0)}</span>
+  </div>
+  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
+    <div style="height:6px;width:${Math.min((last.volume/20)*100,100)}%;background:#22c55e;border-radius:3px;"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+    <span style="font-size:13px;">News</span>
+    <span style="font-size:13px;color:#f59e0b;">+${last.news.toFixed(0)}</span>
+  </div>
+  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
+    <div style="height:6px;width:${Math.min((last.news/20)*100,100)}%;background:#f59e0b;border-radius:3px;"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+    <span style="font-size:13px;">Macro</span>
+    <span style="font-size:13px;color:#a855f7;">+${last.macro.toFixed(0)}</span>
+  </div>
+  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
+    <div style="height:6px;width:${Math.min((last.macro/10)*100,100)}%;background:#a855f7;border-radius:3px;"></div>
+  </div>
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;">
+    <span style="font-size:14px;font-weight:600;">Total Score</span>
+    <span style="font-size:14px;font-weight:600;">${total.toFixed(0)} / 110</span>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function renderDecisions(decisions) {
+  const container = document.getElementById('decision-history');
+  if (!decisions || decisions.length === 0) {
+    container.innerHTML = '<div style="color:#6b7280;font-size:13px;">No AI decisions have been made yet. Run the demo or wait for the monitor to evaluate.</div>';
+    return;
+  }
+  const reversed = [...decisions].reverse().slice(0, 15);
+  let html = '<table><tr><th>Time</th><th>Symbol</th><th>Decision</th><th>Score</th></tr>';
+  reversed.forEach(d => {
+    const cls = d.decision === 'BUY' ? 'green' : d.decision === 'WATCHLIST' ? 'yellow' : 'red';
+    html += `<tr>
+      <td>${new Date(d.time).toLocaleTimeString()}</td>
+      <td>${d.symbol || '—'}</td>
+      <td class="${cls}" style="font-weight:600;">${d.decision || '—'}</td>
+      <td>${(d.total || 0).toFixed(0)}/100</td>
+    </tr>`;
+  });
+  html += '</table>';
+  container.innerHTML = html;
 }
 
 function renderTrades(trades) {
   const container = document.getElementById('trade-table');
   if (!trades || trades.length === 0) {
-    container.innerHTML = '<div class="loading">No trades yet — run the demo to see results here</div>';
+    container.innerHTML = '<div class="loading">No trades yet — decisions appear above while the AI evaluates</div>';
     return;
   }
-
   const reversed = [...trades].reverse().slice(0, 20);
   let html = '<table><tr><th>Time</th><th>Pair</th><th>Side</th><th>Price</th><th>Size</th><th>PnL</th><th>Status</th></tr>';
   reversed.forEach(t => {

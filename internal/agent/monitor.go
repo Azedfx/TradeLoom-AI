@@ -95,6 +95,7 @@ func (m *Monitor) evaluateEntry(s *models.Strategy) {
 	}
 
 	confidence := m.decisionEngine.EvaluateWithConfidence(perception)
+	m.store.LogDecision(symbol, confidence.Total, confidence.Decision, confidence.Signals)
 
 	if confidence.Decision == "BUY" {
 		log.Printf("[MONITOR] 🔥 BUY SIGNAL for %s! Confidence: %.0f/100. Executing...", symbol, confidence.Total)
