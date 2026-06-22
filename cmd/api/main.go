@@ -49,5 +49,5 @@ func main() {
 	api.RegisterRoutes(r, handler)
 
 	log.Printf("server starting on %s (%s mode)", cfg.Port, cfg.TradeMode)
-	r.Run(cfg.Port)
+	r.Run(":" + cfg.Port)
 }
