@@ -29,8 +29,8 @@ WORKDIR /app
 # Copy the binary from the builder stage
 COPY --from=builder /app/main .
 
-# # Copy the templates folder into the container
-COPY --from=builder /app/internal/templates ./internal/templates
+# # # Copy the templates folder into the container
+# COPY --from=builder /app/internal/templates ./internal/templates
 
 # # Copy swagger docs into the container
 # COPY --from=builder /app/docs ./docs
