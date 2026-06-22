@@ -6,21 +6,26 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"trade/internal/models"
 )
 
 type LLMClient struct {
-	apiKey  string
-	baseURL string
-	model   string
+	apiKey    string
+	baseURL   string
+	model     string
+	httpCli   *http.Client
+	briefModel string
 }
 
 func NewLLMClient(apiKey, baseURL, model string) *LLMClient {
 	return &LLMClient{
-		apiKey:  apiKey,
-		baseURL: baseURL,
-		model:   model,
+		apiKey:     apiKey,
+		baseURL:    baseURL,
+		model:      model,
+		httpCli:    &http.Client{Timeout: 60 * time.Second},
+		briefModel: "qwen3.6-flash",
 	}
 }
 
@@ -52,8 +57,7 @@ Output format:
 	req.Header.Set("Authorization", "Bearer "+l.apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := l.httpCli.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("llm request failed: %w", err)
 	}
@@ -165,7 +169,7 @@ Return ONLY valid JSON.`, symbol, sentimentData, newsData, macroData)
 	req.Header.Set("Authorization", "Bearer "+l.apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := l.httpCli.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("market analysis request: %w", err)
 	}
@@ -246,7 +250,7 @@ Return a JSON with these exact fields:
 Return ONLY valid JSON.`, trendingData, sentimentData, newsData, macroData)
 
 	reqBody := map[string]interface{}{
-		"model": l.model,
+		"model": l.briefModel,
 		"messages": []map[string]string{
 			{"role": "system", "content": "You are a chief crypto market strategist. Write concise, data-driven market briefs."},
 			{"role": "user", "content": prompt},
@@ -258,7 +262,7 @@ Return ONLY valid JSON.`, trendingData, sentimentData, newsData, macroData)
 	req.Header.Set("Authorization", "Bearer "+l.apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := l.httpCli.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("brief request: %w", err)
 	}
