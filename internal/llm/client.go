@@ -217,3 +217,91 @@ Return ONLY valid JSON.`, symbol, sentimentData, newsData, macroData)
 
 	return &result, nil
 }
+
+func (l *LLMClient) GenerateMarketBrief(symbol, sentimentData, newsData, macroData, trendingData string) (string, error) {
+	prompt := fmt.Sprintf(`Generate a daily crypto market brief using this real-time data.
+
+Current date: June 2026.
+
+[TRENDING COINS]
+%s
+
+[SENTIMENT DATA]
+%s
+
+[NEWS DATA]
+%s
+
+[MACRO DATA]
+%s
+
+Return a JSON with these exact fields:
+{
+  "market_mood": "<one or two words: e.g. Cautiously Bullish, Risk-Off, etc>",
+  "top_opportunity": "<coin ticker>",
+  "narrative": "<2-3 sentences on what is driving the market right now>",
+  "key_risk": "<one sentence about the biggest risk>",
+  "stance": "<Accumulate | Selective Buy | Hold | Reduce | Avoid>"
+}
+Return ONLY valid JSON.`, trendingData, sentimentData, newsData, macroData)
+
+	reqBody := map[string]interface{}{
+		"model": l.model,
+		"messages": []map[string]string{
+			{"role": "system", "content": "You are a chief crypto market strategist. Write concise, data-driven market briefs."},
+			{"role": "user", "content": prompt},
+		},
+	}
+
+	jsonBody, _ := json.Marshal(reqBody)
+	req, _ := http.NewRequest("POST", l.baseURL, bytes.NewBuffer(jsonBody))
+	req.Header.Set("Authorization", "Bearer "+l.apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("brief request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("brief returned %d: %s", resp.StatusCode, string(body))
+	}
+
+	var raw struct {
+		Choices []struct {
+			Message struct {
+				Content string `json:"content"`
+			} `json:"message"`
+		} `json:"choices"`
+	}
+	json.Unmarshal(body, &raw)
+
+	if len(raw.Choices) == 0 {
+		return `{"market_mood":"Unavailable","narrative":"Could not generate brief."}`, nil
+	}
+
+	content := raw.Choices[0].Message.Content
+	if len(content) > 7 && content[:3] == "```" {
+		start := 0
+		for i := 0; i < len(content); i++ {
+			if content[i] == '{' {
+				start = i
+				break
+			}
+		}
+		end := len(content)
+		for i := len(content) - 1; i >= 0; i-- {
+			if content[i] == '}' {
+				end = i + 1
+				break
+			}
+		}
+		if start > 0 && end > start {
+			content = content[start:end]
+		}
+	}
+
+	return content, nil
+}

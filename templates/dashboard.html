@@ -5,85 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TradeLoom AI — Dashboard</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0c10; color: #e0e4ec; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-  h1 { font-size: 24px; background: linear-gradient(135deg, #6366f1, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  h1 small { font-size: 12px; color: #6b7280; -webkit-text-fill-color: #6b7280; display: block; }
-  .badge { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-  .badge-demo { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: #13161c; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; }
-  .card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin-bottom: 8px; }
-  .card-value { font-size: 28px; font-weight: 700; }
-  .card-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
-  .green { color: #22c55e; } .red { color: #ef4444; } .yellow { color: #f59e0b; } .blue { color: #6366f1; } .cyan { color: #06b6d4; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 10px 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; border-bottom: 1px solid #1e293b; }
-  td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
-  .status-open { color: #22c55e; } .status-closed { color: #6b7280; } .status-buy { color: #22c55e; } .status-sell { color: #ef4444; }
-  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  .loading { text-align: center; padding: 40px; color: #6b7280; }
-  .error { text-align: center; padding: 40px; color: #ef4444; }
-  .mt-24 { margin-top: 24px; }
-  .flex { display: flex; gap: 8px; align-items: center; }
-  .signal-bar { display: flex; gap: 4px; margin-top: 8px; }
-  .signal-segment { height: 6px; border-radius: 3px; flex: 1; }
-  .sig-filled { background: #6366f1; } .sig-empty { background: #1e293b; }
-  .chart-placeholder { height: 80px; display: flex; align-items: flex-end; gap: 2px; padding: 8px 0; }
-  .chart-bar { flex: 1; background: #6366f1; border-radius: 2px 2px 0 0; min-height: 4px; opacity: 0.7; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0c10;color:#e0e4ec}
+.container{max-width:1280px;margin:0 auto;padding:24px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+h1{font-size:22px;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h1 small{font-size:11px;color:#6b7280;-webkit-text-fill-color:#6b7280;display:block;font-weight:400}
+.badge{padding:4px 12px;border-radius:999px;font-size:11px;font-weight:600}
+.badge-demo{background:#1e293b;color:#94a3b8;border:1px solid #334155}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.card{background:#13161c;border:1px solid #1e293b;border-radius:12px;padding:18px}
+.card-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:6px}
+.card-value{font-size:26px;font-weight:700}
+.card-sub{font-size:11px;color:#6b7280;margin-top:2px}
+.green{color:#22c55e}.red{color:#ef4444}.yellow{color:#f59e0b}.blue{color:#6366f1}.cyan{color:#06b6d4}.purple{color:#a855f7}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 10px;color:#6b7280;font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.5px;border-bottom:1px solid #1e293b}
+td{padding:8px 10px;border-bottom:1px solid #1e293b;font-size:12px}
+.section-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.loading{text-align:center;padding:30px;color:#6b7280;font-size:13px}
+.error{text-align:center;padding:30px;color:#ef4444}
+.mt-20{margin-top:20px}
+.flex{display:flex;gap:8px;align-items:center}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:900px){.two-col,.three-col{grid-template-columns:1fr}}
+.rank-num{font-size:13px;font-weight:700;color:#6366f1;width:24px}
+.trend-item{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #1e293b;gap:8px}
+.trend-item:last-child{border-bottom:none}
+.fg-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;margin-bottom:6px}
+.fg-wrap{text-align:center;padding:8px 0}
+.input-row{display:flex;gap:10px}
+.input-row input{flex:1;background:#0a0c10;border:1px solid #1e293b;border-radius:8px;padding:12px 16px;color:#e0e4ec;font-size:14px;outline:none}
+.input-row input:focus{border-color:#6366f1}
+.input-row button{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer}
+.input-row button:disabled{opacity:.5;cursor:not-allowed}
+.input-row button:hover:not(:disabled){background:#4f46e5}
+.result-box{background:#0a0c10;border:1px solid #1e293b;border-radius:8px;padding:14px;margin-top:10px;font-size:13px;white-space:pre-wrap;display:none}
+.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.brief-item{background:#0a0c10;border-radius:8px;padding:12px}
+.brief-label{font-size:10px;text-transform:uppercase;color:#6b7280;letter-spacing:.5px;margin-bottom:4px}
+.brief-val{font-size:13px}
 </style>
 </head>
 <body>
-<div class="container" id="app">
+<div class="container">
   <header>
     <div>
       <h1>TradeLoom AI <small>Built for Bitget AI Base Camp Hackathon S1 2026</small></h1>
     </div>
-    <div class="flex">
-      <span class="badge badge-demo" id="mode-badge">DEMO</span>
-      <span class="badge badge-demo">LIVE</span>
-    </div>
+    <span class="badge badge-demo" id="mode-badge">DEMO</span>
   </header>
 
   <div class="grid" id="metrics">
-    <div class="card"><div class="card-label">Win Rate</div><div class="card-value cyan" id="win-rate">—</div><div class="card-sub">of closed trades</div></div>
+    <div class="card"><div class="card-label">Win Rate</div><div class="card-value cyan" id="win-rate">—</div><div class="card-sub">closed trades</div></div>
     <div class="card"><div class="card-label">Total PnL</div><div class="card-value" id="total-pnl">—</div><div class="card-sub">realized</div></div>
     <div class="card"><div class="card-label">Trades</div><div class="card-value blue" id="trade-count">—</div><div class="card-sub"><span id="open-count">0</span> open · <span id="closed-count">0</span> closed</div></div>
-    <div class="card"><div class="card-label">Avg Confidence</div><div class="card-value yellow" id="avg-confidence">—</div><div class="card-sub">last signal</div></div>
-    <div class="card"><div class="card-label">Health Score</div><div class="card-value" id="health-score">—</div><div class="card-sub">win rate × confidence</div></div>
-    <div class="card"><div class="card-label">Last Decision</div><div class="card-value" id="last-decision" style="font-size:18px;">—</div><div class="card-sub" id="last-decision-time"></div></div>
+    <div class="card"><div class="card-label">Avg Confidence</div><div class="card-value yellow" id="avg-confidence">—</div></div>
+    <div class="card"><div class="card-label">Health Score</div><div class="card-value" id="health-score">—</div></div>
+    <div class="card"><div class="card-label">Last Decision</div><div class="card-value" id="last-decision" style="font-size:16px;">—</div><div class="card-sub" id="last-decision-time"></div></div>
   </div>
 
-  <div class="two-col">
+  <div class="three-col">
+    <div class="card">
+      <div class="section-title">🔥 Market Pulse</div>
+      <div id="trending-coins"><div class="loading">Loading...</div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">😨 Fear & Greed</div>
+      <div id="fear-greed"><div class="loading">Loading...</div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">📰 Daily Market Brief</div>
+      <div id="market-brief"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <div class="card mt-20">
+    <div class="section-title">⚡ AI Command Center</div>
+    <div class="input-row">
+      <input type="text" id="prompt-input" placeholder='e.g. "Find a bullish RWA opportunity like ONDO"' onkeydown="if(event.key==='Enter')submitPrompt()">
+      <button id="prompt-btn" onclick="submitPrompt()">Analyze</button>
+    </div>
+    <div id="prompt-result" class="result-box"></div>
+  </div>
+
+  <div class="two-col mt-20">
     <div class="card">
       <div class="section-title">📋 Trade History</div>
       <div id="trade-table"><div class="loading">Waiting for trades...</div></div>
     </div>
     <div class="card">
-      <div class="section-title">📊 Signal Components</div>
+      <div class="section-title">📊 Signal Breakdown</div>
       <div id="signals"><div class="loading">Waiting for signal data...</div></div>
-      <div class="section-title mt-24">🕐 AI Decision History</div>
+      <div class="section-title mt-20">🕐 AI Decision Log</div>
       <div id="decision-history"><div class="loading">No decisions yet...</div></div>
     </div>
-  </div>
-
-  <div class="card mt-24">
-    <div class="section-title">📡 API Endpoints</div>
-    <table>
-      <tr><td><code>GET /api/v1/dashboard</code></td><td>Full dashboard data</td></tr>
-      <tr><td><code>GET /api/v1/trades</code></td><td>All trades</td></tr>
-      <tr><td><code>GET /api/v1/trades/export</code></td><td>CSV download</td></tr>
-      <tr><td><code>POST /api/v1/strategies</code></td><td>Create strategy</td></tr>
-      <tr><td><code>POST /api/v1/strategies/:id/execute</code></td><td>Execute strategy</td></tr>
-    </table>
   </div>
 </div>
 
 <script>
+// ─── Load everything ───
+async function loadAll() {
+  loadDashboard();
+  loadTrending();
+  loadFearGreed();
+  loadBrief();
+}
+
+// ─── Dashboard ───
 async function loadDashboard() {
   try {
     const res = await fetch('/api/v1/dashboard');
@@ -91,9 +121,7 @@ async function loadDashboard() {
     renderMetrics(data);
     renderTrades(data.trades || []);
     renderDecisions(data.decisions || []);
-  } catch (e) {
-    document.getElementById('metrics').innerHTML = '<div class="error">Cannot connect to server</div>';
-  }
+  } catch(e) { document.getElementById('metrics').innerHTML = '<div class="error">Cannot connect</div>'; }
 }
 
 function renderMetrics(data) {
@@ -101,144 +129,159 @@ function renderMetrics(data) {
   const decisions = data.decisions || [];
   const closed = trades.filter(t => t.status === 'CLOSED');
   const open = trades.filter(t => t.status === 'OPEN');
-  const totalPnl = data.totalPnL || 0;
-  const winRate = data.winRate || 0;
-
-  document.getElementById('win-rate').textContent = winRate ? winRate.toFixed(1) + '%' : '0%';
+  document.getElementById('win-rate').textContent = (data.winRate || 0).toFixed(1) + '%';
   const pnlEl = document.getElementById('total-pnl');
-  pnlEl.textContent = '$' + totalPnl.toFixed(2);
-  pnlEl.className = 'card-value ' + (totalPnl >= 0 ? 'green' : 'red');
+  pnlEl.textContent = '$' + (data.totalPnL || 0).toFixed(2);
+  pnlEl.className = 'card-value ' + ((data.totalPnL||0) >= 0 ? 'green' : 'red');
   document.getElementById('trade-count').textContent = trades.length;
   document.getElementById('open-count').textContent = open.length;
   document.getElementById('closed-count').textContent = closed.length;
-
-  // Average confidence from decisions
   const confs = decisions.map(d => d.total).filter(c => c > 0);
-  const avgConf = confs.length ? confs.reduce((a,b)=>a+b,0) / confs.length : 0;
-  document.getElementById('avg-confidence').textContent = avgConf ? avgConf.toFixed(1) : '—';
-
-  const health = confs.length ? (winRate * (avgConf / 100)) : 0;
-  const healthEl = document.getElementById('health-score');
-  healthEl.textContent = health ? Math.min(health, 100).toFixed(1) : '—';
-  healthEl.className = 'card-value ' + (health > 50 ? 'green' : health > 25 ? 'yellow' : 'red');
-
-  // Last decision from decision log
-  if (decisions.length > 0) {
-    const last = decisions[decisions.length - 1];
+  const avg = confs.length ? confs.reduce((a,b)=>a+b,0)/confs.length : 0;
+  document.getElementById('avg-confidence').textContent = avg ? avg.toFixed(1) : '—';
+  const h = confs.length ? Math.min((data.winRate||0) * (avg/100) / 100 * 100, 100) : 0;
+  const hEl = document.getElementById('health-score');
+  hEl.textContent = h ? h.toFixed(1) : '—';
+  hEl.className = 'card-value ' + (h > 50 ? 'green' : h > 25 ? 'yellow' : 'red');
+  if (decisions.length) {
+    const last = decisions[decisions.length-1];
     document.getElementById('last-decision').textContent = last.decision + ' (' + last.total.toFixed(0) + ')';
-    document.getElementById('last-decision').className = 'card-value ' +
-      (last.decision === 'BUY' ? 'green' : last.decision === 'WATCHLIST' ? 'yellow' : 'red');
-    document.getElementById('last-decision-time').textContent = last.symbol + ' · ' + new Date(last.time).toLocaleString();
+    document.getElementById('last-decision').className = 'card-value ' + (last.decision==='BUY'?'green':last.decision==='WATCHLIST'?'yellow':'red');
+    document.getElementById('last-decision-time').textContent = last.symbol + ' · ' + new Date(last.time).toLocaleTimeString();
   }
-
-  // Mode badge
-  const modeEl = document.getElementById('mode-badge');
-  if (data.mode) modeEl.textContent = data.mode.toUpperCase();
-
-  // Signal bars
   renderSignals(decisions);
 }
 
 function renderSignals(decisions) {
-  const container = document.getElementById('signals');
-  if (!decisions.length) {
-    container.innerHTML = '<div style="color:#6b7280;font-size:13px;">Run the demo to see signal breakdowns</div>';
-    return;
-  }
-  const last = decisions[decisions.length - 1];
-  const maxScore = 30 + 30 + 20 + 20 + 10; // 110
-  const total = last.sentiment + last.technical + last.volume + last.news + last.macro;
-  const pct = Math.min((total / maxScore) * 100, 100);
-
-  let html = `<div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-    <span style="font-size:13px;">Sentiment</span>
-    <span style="font-size:13px;color:#6366f1;">+${last.sentiment.toFixed(0)}</span>
-  </div>
-  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
-    <div style="height:6px;width:${Math.min((last.sentiment/30)*100,100)}%;background:#6366f1;border-radius:3px;"></div>
-  </div>
-  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-    <span style="font-size:13px;">Technical</span>
-    <span style="font-size:13px;color:#06b6d4;">+${last.technical.toFixed(0)}</span>
-  </div>
-  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
-    <div style="height:6px;width:${Math.min((last.technical/30)*100,100)}%;background:#06b6d4;border-radius:3px;"></div>
-  </div>
-  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-    <span style="font-size:13px;">Volume</span>
-    <span style="font-size:13px;color:#22c55e;">+${last.volume.toFixed(0)}</span>
-  </div>
-  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
-    <div style="height:6px;width:${Math.min((last.volume/20)*100,100)}%;background:#22c55e;border-radius:3px;"></div>
-  </div>
-  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-    <span style="font-size:13px;">News</span>
-    <span style="font-size:13px;color:#f59e0b;">+${last.news.toFixed(0)}</span>
-  </div>
-  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
-    <div style="height:6px;width:${Math.min((last.news/20)*100,100)}%;background:#f59e0b;border-radius:3px;"></div>
-  </div>
-  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-    <span style="font-size:13px;">Macro</span>
-    <span style="font-size:13px;color:#a855f7;">+${last.macro.toFixed(0)}</span>
-  </div>
-  <div style="height:6px;background:#1e293b;border-radius:3px;margin-bottom:12px;">
-    <div style="height:6px;width:${Math.min((last.macro/10)*100,100)}%;background:#a855f7;border-radius:3px;"></div>
-  </div>
-  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;">
-    <span style="font-size:14px;font-weight:600;">Total Score</span>
-    <span style="font-size:14px;font-weight:600;">${total.toFixed(0)} / 110</span>
-  </div>`;
-  container.innerHTML = html;
+  const el = document.getElementById('signals');
+  if (!decisions.length) { el.innerHTML = '<div style="color:#6b7280;font-size:12px;">No evaluations yet</div>'; return; }
+  const last = decisions[decisions.length-1];
+  const bars = [
+    {label:'Sentiment',score:last.sentiment,max:30,color:'#6366f1'},
+    {label:'Technical',score:last.technical,max:30,color:'#06b6d4'},
+    {label:'Volume',score:last.volume,max:20,color:'#22c55e'},
+    {label:'News',score:last.news,max:20,color:'#f59e0b'},
+    {label:'Macro',score:last.macro,max:10,color:'#a855f7'}
+  ];
+  let html = '';
+  bars.forEach(b => {
+    html += `<div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:12px;">${b.label}</span><span style="font-size:12px;color:${b.color};">+${b.score.toFixed(0)}</span></div>
+      <div style="height:5px;background:#1e293b;border-radius:3px;margin-bottom:10px;"><div style="height:5px;width:${Math.min((b.score/b.max)*100,100)}%;background:${b.color};border-radius:3px;"></div></div>`;
+  });
+  const total = bars.reduce((s,b)=>s+b.score,0);
+  html += `<div style="border-top:1px solid #1e293b;padding-top:8px;display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:600;">Total</span><span style="font-size:13px;font-weight:600;">${total.toFixed(0)} / 110</span></div>`;
+  el.innerHTML = html;
 }
 
 function renderDecisions(decisions) {
-  const container = document.getElementById('decision-history');
-  if (!decisions || decisions.length === 0) {
-    container.innerHTML = '<div style="color:#6b7280;font-size:13px;">No AI decisions have been made yet. Run the demo or wait for the monitor to evaluate.</div>';
-    return;
-  }
-  const reversed = [...decisions].reverse().slice(0, 15);
+  const el = document.getElementById('decision-history');
+  if (!decisions.length) { el.innerHTML = '<div style="color:#6b7280;font-size:12px;">No decisions yet</div>'; return; }
+  const items = [...decisions].reverse().slice(0,15);
   let html = '<table><tr><th>Time</th><th>Symbol</th><th>Decision</th><th>Score</th></tr>';
-  reversed.forEach(d => {
-    const cls = d.decision === 'BUY' ? 'green' : d.decision === 'WATCHLIST' ? 'yellow' : 'red';
-    html += `<tr>
-      <td>${new Date(d.time).toLocaleTimeString()}</td>
-      <td>${d.symbol || '—'}</td>
-      <td class="${cls}" style="font-weight:600;">${d.decision || '—'}</td>
-      <td>${(d.total || 0).toFixed(0)}/100</td>
-    </tr>`;
+  items.forEach(d => {
+    const c = d.decision==='BUY'?'green':d.decision==='WATCHLIST'?'yellow':'red';
+    html += `<tr><td>${new Date(d.time).toLocaleTimeString()}</td><td>${d.symbol||'—'}</td><td class="${c}" style="font-weight:600;">${d.decision||'—'}</td><td>${(d.total||0).toFixed(0)}</td></tr>`;
   });
   html += '</table>';
-  container.innerHTML = html;
+  el.innerHTML = html;
 }
 
 function renderTrades(trades) {
-  const container = document.getElementById('trade-table');
-  if (!trades || trades.length === 0) {
-    container.innerHTML = '<div class="loading">No trades yet — decisions appear above while the AI evaluates</div>';
-    return;
-  }
-  const reversed = [...trades].reverse().slice(0, 20);
+  const el = document.getElementById('trade-table');
+  if (!trades.length) { el.innerHTML = '<div class="loading">No trades yet</div>'; return; }
+  const items = [...trades].reverse().slice(0,20);
   let html = '<table><tr><th>Time</th><th>Pair</th><th>Side</th><th>Price</th><th>Size</th><th>PnL</th><th>Status</th></tr>';
-  reversed.forEach(t => {
-    const ts = t.created_at ? new Date(t.created_at).toLocaleString() : t.id || '—';
+  items.forEach(t => {
+    const ts = t.created_at ? new Date(t.created_at).toLocaleString() : '—';
     const pnl = t.pnl || 0;
-    html += `<tr>
-      <td>${ts}</td>
-      <td>${t.symbol || '—'}</td>
-      <td class="status-${t.side === 'buy' ? 'buy' : 'sell'}">${(t.side || '—').toUpperCase()}</td>
-      <td>$${(t.price || 0).toFixed(4)}</td>
-      <td>${(t.size || 0).toFixed(4)}</td>
-      <td class="${pnl >= 0 ? 'green' : 'red'}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
-      <td class="status-${t.status === 'OPEN' ? 'open' : 'closed'}">${t.status || '—'}</td>
-    </tr>`;
+    html += `<tr><td>${ts}</td><td>${t.symbol||'—'}</td><td class="${t.side==='buy'?'green':'red'}" style="font-weight:600;">${(t.side||'—').toUpperCase()}</td><td>$${(t.price||0).toFixed(4)}</td><td>${(t.size||0).toFixed(4)}</td><td class="${pnl>=0?'green':'red'}">${pnl>=0?'+':''}$${pnl.toFixed(2)}</td><td>${t.status||'—'}</td></tr>`;
   });
   html += '</table>';
-  container.innerHTML = html;
+  el.innerHTML = html;
 }
 
-loadDashboard();
+// ─── Trending ───
+async function loadTrending() {
+  try {
+    const res = await fetch('/api/v1/trending');
+    const data = await res.json();
+    const coins = data.trending || [];
+    const el = document.getElementById('trending-coins');
+    if (!coins.length) { el.innerHTML = '<div style="color:#6b7280;font-size:12px;">No trending data</div>'; return; }
+    let html = '';
+    coins.forEach((c,i) => {
+      const symbol = c.symbol || c.baseCoin || c.base || JSON.stringify(c);
+      html += `<div class="trend-item"><span class="rank-num">#${i+1}</span><span style="flex:1;font-weight:600;">${symbol}</span><span class="badge badge-demo" style="font-size:10px;">Trending</span></div>`;
+    });
+    el.innerHTML = html;
+  } catch(e) { document.getElementById('trending-coins').innerHTML = '<div style="color:#6b7280;font-size:12px;">Unavailable</div>'; }
+}
+
+// ─── Fear & Greed ───
+async function loadFearGreed() {
+  try {
+    const res = await fetch('/api/v1/fear-greed');
+    const data = await res.json();
+    const score = data.score || data.value || 0;
+    const sentiment = data.sentiment || data.rating || 'N/A';
+    const el = document.getElementById('fear-greed');
+    const color = score > 50 ? '#22c55e' : score > 25 ? '#f59e0b' : '#ef4444';
+    el.innerHTML = `<div class="fg-wrap"><div class="fg-circle" style="border:3px solid ${color};color:${color};margin:0 auto;">${score}</div><div style="font-size:14px;font-weight:600;color:${color};">${sentiment}</div><div style="font-size:11px;color:#6b7280;margin-top:4px;">Fear & Greed Index</div></div>`;
+  } catch(e) { document.getElementById('fear-greed').innerHTML = '<div style="color:#6b7280;font-size:12px;">Unavailable</div>'; }
+}
+
+// ─── Market Brief ───
+async function loadBrief() {
+  try {
+    const res = await fetch('/api/v1/brief');
+    const data = await res.json();
+    const el = document.getElementById('market-brief');
+    if (data.error) { el.innerHTML = '<div style="color:#6b7280;font-size:12px;">Brief unavailable</div>'; return; }
+    const mood = data.market_mood || 'N/A';
+    const opp = data.top_opportunity || 'N/A';
+    const narrative = data.narrative || '';
+    const risk = data.key_risk || '';
+    const stance = data.stance || 'Hold';
+    const stanceColor = stance==='Accumulate'||stance==='Selective Buy'?'#22c55e':stance==='Hold'?'#f59e0b':'#ef4444';
+    el.innerHTML = `<div class="brief-grid">
+      <div class="brief-item"><div class="brief-label">Market Mood</div><div class="brief-val" style="color:${mood.includes('Bullish')?'#22c55e':mood.includes('Fear')?'#ef4444':'#f59e0b'};">${mood}</div></div>
+      <div class="brief-item"><div class="brief-label">Top Opportunity</div><div class="brief-val cyan">${opp}</div></div>
+      <div class="brief-item" style="grid-column:1/-1;"><div class="brief-label">Narrative</div><div class="brief-val" style="color:#94a3b8;">${narrative || 'No data'}</div></div>
+      <div class="brief-item" style="grid-column:1/-1;"><div class="brief-label">Key Risk</div><div class="brief-val" style="color:#ef4444;">${risk || 'No data'}</div></div>
+      <div class="brief-item" style="grid-column:1/-1;text-align:center;padding:10px;"><span style="font-size:13px;font-weight:700;color:${stanceColor};">Stance: ${stance}</span></div>
+    </div>`;
+  } catch(e) { document.getElementById('market-brief').innerHTML = '<div style="color:#6b7280;font-size:12px;">Unavailable</div>'; }
+}
+
+// ─── Prompt ───
+async function submitPrompt() {
+  const input = document.getElementById('prompt-input');
+  const btn = document.getElementById('prompt-btn');
+  const result = document.getElementById('prompt-result');
+  const prompt = input.value.trim();
+  if (!prompt) return;
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+  result.style.display = 'block';
+  result.textContent = 'Running AI analysis...';
+  try {
+    const res = await fetch('/api/v1/quick-execute', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({prompt})
+    });
+    const data = await res.json();
+    result.textContent = data.explain || JSON.stringify(data, null, 2);
+    loadDashboard();
+  } catch(e) {
+    result.textContent = 'Error: ' + e.message;
+  }
+  btn.disabled = false;
+  btn.textContent = 'Analyze';
+}
+
+loadAll();
+setInterval(loadAll, 10000);
 setInterval(loadDashboard, 5000);
 </script>
 </body>

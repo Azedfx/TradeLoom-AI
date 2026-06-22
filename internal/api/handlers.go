@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -274,4 +275,122 @@ func (h *StrategyHandler) ExportTradesCSV(c *gin.Context) {
 			t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.Status))
 	}
 	c.String(http.StatusOK, b.String())
+}
+
+func (h *StrategyHandler) TrendingCoins(c *gin.Context) {
+	raw, err := h.mcpClient.CryptoMarket("trending", map[string]interface{}{"limit": 5})
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"trending": []string{}, "error": err.Error()})
+		return
+	}
+	var trending []interface{}
+	json.Unmarshal(raw, &trending)
+	c.JSON(http.StatusOK, gin.H{"trending": trending})
+}
+
+func (h *StrategyHandler) FearGreedIndex(c *gin.Context) {
+	raw, err := h.mcpClient.SentimentIndex("fear-and-greed")
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"score": 0, "sentiment": "unavailable"})
+		return
+	}
+	var fg map[string]interface{}
+	json.Unmarshal(raw, &fg)
+	c.JSON(http.StatusOK, fg)
+}
+
+func (h *StrategyHandler) MarketBrief(c *gin.Context) {
+	ticker := h.defaultSymbol
+	if t := c.Query("symbol"); t != "" {
+		ticker = t
+	}
+
+	sentiment, _ := h.mcpClient.SentimentIndex("fear-and-greed")
+	news, _ := h.mcpClient.NewsFeed("cryptopanic", ticker, 5)
+	macro, _ := h.mcpClient.MacroIndicators("latest", "cpi")
+	trending, _ := h.mcpClient.CryptoMarket("trending", map[string]interface{}{"limit": 5})
+
+	brief, err := h.intentParser.GenerateMarketBrief(ticker,
+		string(sentiment), string(news), string(macro), string(trending))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"error": err.Error(), "market_mood": "Unavailable"})
+		return
+	}
+
+	var result map[string]interface{}
+	json.Unmarshal([]byte(brief), &result)
+	c.JSON(http.StatusOK, result)
+}
+
+func (h *StrategyHandler) QuickExecute(c *gin.Context) {
+	var req struct {
+		Prompt string `json:"prompt"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || req.Prompt == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "prompt is required"})
+		return
+	}
+
+	intent, err := h.intentParser.ParseIntent(req.Prompt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	rules := h.strategyCompiler.Compile(intent)
+	symbol := agent.ResolveSymbol(rules.AssetFilter, h.defaultSymbol)
+	ticker := symbol
+	if len(symbol) > 4 {
+		ticker = symbol[:len(symbol)-4]
+	}
+	ticker = strings.ToUpper(ticker)
+
+	strategy := &models.Strategy{
+		ID:           uuid.New().String(),
+		UserPrompt:   req.Prompt,
+		Rules:        *rules,
+		TargetSymbol: symbol,
+		Active:       true,
+		CreatedAt:    time.Now(),
+	}
+	h.store.SaveStrategy(strategy)
+
+	// Immediately execute
+	marketData := &bitget.MarketData{}
+	technical, err := marketData.GetTechnicalIndicators(symbol)
+	techMap := map[string]interface{}{}
+	if err == nil && technical != nil {
+		techMap["trend"] = technical.Trend
+		techMap["rsi"] = technical.RSI14
+		techMap["change24h"] = fmt.Sprintf("%f", technical.Change24h)
+		techMap["quoteVolume"] = fmt.Sprintf("%f", technical.Volume)
+		techMap["last_price"] = technical.LastPrice
+		techMap["sma_7"] = technical.SMA7
+		techMap["sma_25"] = technical.SMA25
+	}
+
+	sentiment, _ := h.mcpClient.SentimentIndex("fear-and-greed")
+	news, _ := h.mcpClient.NewsFeed("cryptopanic", ticker, 5)
+	macro, _ := h.mcpClient.MacroIndicators("latest", "cpi")
+	marketAnalysis, _ := h.intentParser.AnalyzeMarketWithData(symbol, string(sentiment), string(news), string(macro))
+
+	perception := &models.MarketPerception{
+		Technical: techMap,
+	}
+	if marketAnalysis != nil {
+		perception.Sentiment = marketAnalysis.Sentiment
+		perception.News = marketAnalysis.News
+		perception.Macro = marketAnalysis.Macro
+	}
+
+	confidence := h.decisionEngine.EvaluateWithConfidence(perception)
+	h.store.LogDecision(ticker, confidence.Total, confidence.Decision, confidence.Signals)
+	explain := h.decisionEngine.Explain(ticker, confidence)
+
+	c.JSON(http.StatusOK, gin.H{
+		"symbol":           symbol,
+		"decision":         confidence.Decision,
+		"confidence_score": confidence,
+		"explain":          explain,
+	})
 }
