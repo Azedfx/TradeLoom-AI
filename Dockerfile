@@ -30,7 +30,7 @@ WORKDIR /app
 COPY --from=builder /app/main .
 
 # # # Copy the templates folder into the container
-COPY --from=builder /app/internal/templates ./internal/templates
+COPY --from=builder /app/templates ./templates
 
 # # Copy swagger docs into the container
 # COPY --from=builder /app/docs ./docs

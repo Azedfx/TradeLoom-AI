@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -334,11 +335,24 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 		demoFields = h.marketData.DemoFields()
 	}
 
+	var totalProfit, totalLoss float64
+	for _, t := range trades {
+		if t.Status == "CLOSED" {
+			if t.PnL > 0 {
+				totalProfit += t.PnL
+			} else {
+				totalLoss += t.PnL
+			}
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"strategies":      strategies,
 		"trades":          trades,
 		"decisions":       decisions,
 		"totalPnL":        h.store.CalculatePnL(),
+		"totalProfit":     totalProfit,
+		"totalLoss":       totalLoss,
 		"winRate":         h.store.CalculateWinRate(),
 		"mode":            h.tradeMode,
 		"conversation":    h.store.GetConversation(),
@@ -402,7 +416,6 @@ func (h *StrategyHandler) FearGreedIndex(c *gin.Context) {
 }
 
 func (h *StrategyHandler) MarketBrief(c *gin.Context) {
-	// Return cached brief if fresh (≤5 min)
 	if h.briefCache != "" && time.Since(h.briefCacheTime) < 5*time.Minute {
 		var result map[string]interface{}
 		json.Unmarshal([]byte(h.briefCache), &result)
@@ -410,20 +423,53 @@ func (h *StrategyHandler) MarketBrief(c *gin.Context) {
 		return
 	}
 
-	sentiment, _ := h.mcpClient.SentimentIndex("fear-and-greed")
+	// Gather data for AI brief
+	sentimentRaw, _ := h.mcpClient.SentimentIndex("fear-and-greed")
 	trendingRaw, _ := h.mcpClient.CryptoMarket("trending", map[string]interface{}{"limit": 5})
+	newsRaw, _ := h.mcpClient.NewsFeed("crypto", "bitcoin,ethereum,solana", 5)
+	macroRaw, _ := h.mcpClient.MacroIndicators("federal-reserve", "interest-rate")
 
-	// Get FGI for brief
+	sentimentStr := "{}"
+	newsStr := "{}"
+	macroStr := "{}"
+	trendingStr := "{}"
+	if sentimentRaw != nil {
+		sentimentStr = string(sentimentRaw)
+	}
+	if newsRaw != nil {
+		newsStr = string(newsRaw)
+	}
+	if macroRaw != nil {
+		macroStr = string(macroRaw)
+	}
+	if trendingRaw != nil {
+		trendingStr = string(trendingRaw)
+	}
+
+	// Try AI-generated brief
+	briefStr, aiErr := h.intentParser.GenerateMarketBrief("MARKET", sentimentStr, newsStr, macroStr, trendingStr)
+	if aiErr == nil && briefStr != "" {
+		log.Printf("[AI] Market brief generated via LLM")
+		h.briefCache = briefStr
+		h.briefCacheTime = time.Now()
+		var result map[string]interface{}
+		json.Unmarshal([]byte(briefStr), &result)
+		c.JSON(http.StatusOK, result)
+		return
+	}
+	if aiErr != nil {
+		log.Printf("[AI] GenerateMarketBrief failed: %v — using rule-based brief", aiErr)
+	}
+
+	// Fallback: rule-based brief
 	fgiVal := 50
-	var fgData map[string]interface{}
-	if sentiment != nil {
-		json.Unmarshal(sentiment, &fgData)
+	if sentimentRaw != nil {
+		var fgData map[string]interface{}
+		json.Unmarshal(sentimentRaw, &fgData)
 		if s, ok := fgData["fear_greed"].(float64); ok {
 			fgiVal = int(s)
 		}
 	}
-
-	// Get top trending coin names
 	trendingNames := []string{}
 	if trendingRaw != nil {
 		var tc []struct {
@@ -436,7 +482,6 @@ func (h *StrategyHandler) MarketBrief(c *gin.Context) {
 		}
 	}
 
-	// Build a template brief (fast, no LLM needed)
 	mood := "Neutral"
 	stance := "Hold"
 	if fgiVal >= 60 {
@@ -571,8 +616,14 @@ func (h *StrategyHandler) QuickExecute(c *gin.Context) {
 		return
 	}
 
-	// ─── SEARCH / ANALYZE FLOW ───
-	intent := agent.QuickParseIntent(req.Prompt)
+	// ─── SEARCH / ANALYZE FLOW — try AI first, fall back to rule-based
+	intent, aiErr := h.intentParser.ParseIntent(req.Prompt)
+	if aiErr != nil {
+		log.Printf("[AI] ParseIntent failed: %v — using rule-based fallback", aiErr)
+		intent = agent.QuickParseIntent(req.Prompt)
+	} else {
+		log.Printf("[AI] ParseIntent success: %+v", intent)
+	}
 
 	// Determine which coins to analyze
 	var targets []string
@@ -827,8 +878,13 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 		maxRiskPercent = 2
 	}
 	maxRisk := balance * (maxRiskPercent / 100)
-	positionSize := maxRisk / tech.LastPrice
-	riskValue := positionSize * tech.LastPrice
+
+	positionSize := 0.0
+	riskValue := 0.0
+	if tech.LastPrice > 0 && maxRisk > 0 {
+		positionSize = maxRisk / tech.LastPrice
+		riskValue = positionSize * tech.LastPrice
+	}
 
 	var explain strings.Builder
 	if side == "short" {
@@ -837,7 +893,11 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 		explain.WriteString(fmt.Sprintf("💰 Buying %s\n", want))
 	}
 	explain.WriteString(fmt.Sprintf("Price: $%.2f\n", tech.LastPrice))
-	explain.WriteString(fmt.Sprintf("Position: %.4f %s ($%.2f)\n", positionSize, want, riskValue))
+	if positionSize > 0 {
+		explain.WriteString(fmt.Sprintf("Position: %.4f %s ($%.2f)\n", positionSize, want, riskValue))
+	} else {
+		explain.WriteString(fmt.Sprintf("Position sizing unavailable (price data: $%.2f, capital: $%.0f)", tech.LastPrice, balance))
+	}
 	explain.WriteString(fmt.Sprintf("Risk: $%.2f (2%% of $%.0f capital)\n", riskValue, balance))
 
 	// Collect warnings from both decision engine and tech checks
@@ -881,6 +941,14 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 			"explain":      explain.String(),
 			"conversation": h.store.GetConversation(),
 		})
+		return
+	}
+
+	// Block trades with confidence < 50 regardless of confirmation
+	if confidence.Decision == "NO_TRADE" {
+		msg := fmt.Sprintf("Cannot trade %s — market conditions are weak (confidence %.0f/100). Try a different coin.", want, confidence.Total)
+		h.store.AddChatMessage("assistant", msg)
+		c.JSON(http.StatusOK, gin.H{"type": "error", "explain": msg})
 		return
 	}
 

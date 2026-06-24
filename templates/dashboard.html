@@ -513,7 +513,7 @@ body{
       <div class="glow" id="pnl-glow" style="background:var(--accent-green)"></div>
       <div class="mc-label">Realized P&amp;L</div>
       <div class="mc-val" id="total-pnl" style="color:var(--accent-green)">$0.00</div>
-      <div class="mc-sub" id="pnl-sub">Across all trades</div>
+      <div class="mc-sub" id="pnl-sub">Profit: <span id="pnl-profit" style="color:var(--accent-green)">+$0.00</span> / Loss: <span id="pnl-loss" style="color:var(--accent-red)">-$0.00</span></div>
     </div>
     <div class="mc" id="mc-tc">
       <div class="glow" style="background:var(--accent-blue)"></div>
@@ -790,6 +790,10 @@ async function refresh(){
       pEl.style.color=pnl>=0?'var(--accent-green)':'var(--accent-red)';
       animateGlow(pGlow);
     }
+    const profEl=document.getElementById('pnl-profit');
+    const lossEl=document.getElementById('pnl-loss');
+    profEl.textContent=(d.totalProfit>0?'+':'-')+'$'+Math.abs(d.totalProfit||0).toFixed(2);
+    lossEl.textContent=(d.totalLoss<0?'-':'+')+'$'+Math.abs(d.totalLoss||0).toFixed(2);
     if(prev.tc!==trades.length){animateNumber(tEl,prev.tc,trades.length, fmtTC, 600);animateGlow(document.querySelector('#mc-tc .glow'))}
     prev={wr,pnl,tc:trades.length};
 
@@ -837,14 +841,15 @@ async function refresh(){
         h+='<div style="font-size:9px;color:var(--accent-green);font-weight:600;margin-bottom:4px">● OPEN ('+openTrades.length+')</div>';
         [...openTrades].reverse().slice(0,4).forEach(t=>{
           const side=(t.side==='long'||t.side==='buy')?'long':'short';
-          h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':''}$${Math.abs(t.pnl).toFixed(2)}</span></div>`;
+          h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':'-'}${Math.abs(t.pnl).toFixed(2)}</span></div>`;
         });
       }
       if(closedTrades.length){
         h+='<div style="font-size:9px;color:var(--text-muted);font-weight:600;margin:4px 0">CLOSED</div>';
         [...closedTrades].reverse().slice(0,5).forEach(t=>{
           const side=(t.side==='long'||t.side==='buy')?'long':'short';
-          h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':''}$${Math.abs(t.pnl).toFixed(2)}</span><span class="trade-status">CLOSED</span></div>`;
+          const exitInfo=t.exit_price?' → '+fmtPrice(t.exit_price):'';
+          h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}${exitInfo}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':'-'}$${Math.abs(t.pnl).toFixed(2)}</span><span class="trade-status">CLOSED</span></div>`;
         });
       }
       if(!openTrades.length&&!closedTrades.length){

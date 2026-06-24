@@ -49,6 +49,7 @@ type Trade struct {
 	Size      float64   `json:"size"`
 	Price     float64   `json:"price"`
 	PnL       float64   `json:"pnl"`
+	ExitPrice float64   `json:"exit_price"`
 	Status    string    `json:"status"` // "OPEN", "CLOSED"
 	CreatedAt time.Time `json:"created_at"`
 }

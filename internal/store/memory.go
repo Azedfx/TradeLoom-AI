@@ -156,6 +156,7 @@ func (s *MemoryStore) CloseTrade(id string, exitPrice, pnl float64) {
 		if s.trades[i].ID == id {
 			s.trades[i].Status = "CLOSED"
 			s.trades[i].PnL = pnl
+			s.trades[i].ExitPrice = exitPrice
 			t := s.trades[i]
 			lockedCapital := t.Size * t.Price
 			s.AccountBalance += lockedCapital + pnl

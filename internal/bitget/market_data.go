@@ -1,7 +1,6 @@
 package bitget
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,18 +10,12 @@ import (
 )
 
 type MarketData struct {
-	httpCli      *http.Client
-	usingDemo    bool
-	demoFields   []string
+	httpCli   *http.Client
+	coinGecko *CoinGeckoSource
 }
 
-func (m *MarketData) UsingDemoData() bool {
-	return m.usingDemo
-}
-
-func (m *MarketData) DemoFields() []string {
-	return m.demoFields
-}
+func (m *MarketData) UsingDemoData() bool { return false }
+func (m *MarketData) DemoFields() []string { return nil }
 
 func NewMarketData() *MarketData {
 	dialer := &net.Dialer{Timeout: 1 * time.Second}
@@ -31,27 +24,7 @@ func NewMarketData() *MarketData {
 			Timeout:   3 * time.Second,
 			Transport: &http.Transport{DialContext: dialer.DialContext},
 		},
-	}
-}
-
-func bitgetReachable() bool {
-	dialer := net.Dialer{Timeout: 1 * time.Second}
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
-	conn, err := dialer.DialContext(ctx, "tcp", "api.bitget.com:443")
-	if err != nil {
-		return false
-	}
-	conn.Close()
-	return true
-}
-
-var reachable bool
-
-func init() {
-	reachable = bitgetReachable()
-	if !reachable {
-		fmt.Println("⚠ Bitget API unreachable — using demo data")
+		coinGecko: NewCoinGeckoSource(),
 	}
 }
 

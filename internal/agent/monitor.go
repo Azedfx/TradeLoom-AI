@@ -183,7 +183,8 @@ func (m *Monitor) evaluateExit(t models.Trade) {
 		trendWarn = "bearish"
 	}
 
-	if tech.Trend == trendWarn {
+	// In demo mode, skip trend-based exits (demo trend oscillates and causes premature closes)
+	if m.tradeMode != "demo" && tech.Trend == trendWarn {
 		shouldExit = true
 		reason = fmt.Sprintf("Trend turned %s", trendWarn)
 	} else if !isShort && tech.RSI14 > 80 {

@@ -15,7 +15,7 @@ func QuickParseIntent(prompt string) *models.UserIntent {
 		MaxRiskPerTrade: 2,
 	}
 
-	// Detect specific coin mentions
+	// Detect specific coin mentions — ordered by specificity
 	coinChecks := []struct {
 		keywords []string
 		symbol   string
@@ -23,19 +23,36 @@ func QuickParseIntent(prompt string) *models.UserIntent {
 		{[]string{"bitcoin", " btc"}, "BTC"},
 		{[]string{"ethereum", " eth"}, "ETH"},
 		{[]string{"solana", " sol"}, "SOL"},
-		{[]string{" fetch", "fet "}, "FET"},
-		{[]string{" tao", "tao "}, "TAO"},
-		{[]string{"render", "rndr"}, "RNDR"},
+		{[]string{" fetch", " fet", "fetch.ai"}, "FET"},
+		{[]string{" tao", " tao", "bittensor"}, "TAO"},
+		{[]string{"render", " rndr"}, "RNDR"},
 		{[]string{"chainlink", " link"}, "LINK"},
 		{[]string{"avalanche", "avax"}, "AVAX"},
-		{[]string{"polkadot", " dot", "dot "}, "DOT"},
+		{[]string{"polkadot", " dot "}, "DOT"},
 		{[]string{"dogecoin", "doge"}, "DOGE"},
 		{[]string{"polygon", "matic"}, "MATIC"},
-		{[]string{"arbitrum", " arb", "arb "}, "ARB"},
-		{[]string{"optimism", " op", "op "}, "OP"},
-		{[]string{"aptos", " apt", "apt "}, "APT"},
+		{[]string{"arbitrum", " arb"}, "ARB"},
+		{[]string{"optimism", " op "}, "OP"},
+		{[]string{"aptos", " apt"}, "APT"},
 		{[]string{" sui", "sui "}, "SUI"},
 		{[]string{"near"}, "NEAR"},
+		{[]string{"ondo", " ondo"}, "ONDO"},
+		{[]string{"worldcoin", "wld"}, "WLD"},
+		{[]string{"uniswap", "uni"}, "UNI"},
+		{[]string{"aave"}, "AAVE"},
+		{[]string{"maker", "mkr"}, "MKR"},
+		{[]string{"curve", "crv"}, "CRV"},
+		{[]string{"shiba", "shib"}, "SHIB"},
+		{[]string{"pepe"}, "PEPE"},
+		{[]string{"wif", "dogwifhat"}, "WIF"},
+		{[]string{"sei"}, "SEI"},
+		{[]string{"injective", "inj"}, "INJ"},
+		{[]string{"celestia", "tia"}, "TIA"},
+		{[]string{"strk", "starknet"}, "STRK"},
+		{[]string{"immutable", "imx"}, "IMX"},
+		{[]string{"sandbox", "sand"}, "SAND"},
+		{[]string{"gala"}, "GALA"},
+		{[]string{"agix", "singularity"}, "AGIX"},
 	}
 	for _, c := range coinChecks {
 		for _, kw := range c.keywords {
@@ -80,6 +97,19 @@ func QuickParseIntent(prompt string) *models.UserIntent {
 	}
 	intent.Assets = unique
 
+	// If no known coins found, try extracting standalone uppercase words as tickers
+	if len(intent.Assets) == 0 {
+		for _, word := range strings.Fields(lower) {
+			word = strings.Trim(word, ",.;:!?()[]{}\"'")
+			if len(word) >= 2 && len(word) <= 6 && isAlpha(word) {
+				sym := strings.ToUpper(word)
+				if sym != "FOR" && sym != "THE" && sym != "AND" && sym != "CHECK" {
+					intent.Assets = append(intent.Assets, sym)
+				}
+			}
+		}
+	}
+
 	// Detect market condition
 	if strings.Contains(lower, "bull") || strings.Contains(lower, "momentum") || strings.Contains(lower, "strong") {
 		intent.MarketCondition = "bullish"
@@ -103,4 +133,13 @@ func QuickParseIntent(prompt string) *models.UserIntent {
 	}
 
 	return intent
+}
+
+func isAlpha(s string) bool {
+	for _, r := range s {
+		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
+			return false
+		}
+	}
+	return true
 }

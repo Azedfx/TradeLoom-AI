@@ -1,88 +1,24 @@
 {
   "last_opportunities": [
     {
-      "symbol": "FET",
+      "symbol": "BTC",
       "decision": "NO_TRADE",
-      "confidence": 40,
+      "confidence": 15,
       "sentiment_score": 0,
-      "tech_score": 30,
-      "volume_score": 10,
+      "tech_score": 15,
+      "volume_score": 0,
       "news_score": 0,
       "macro_score": 0,
-      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.038000; RSI 38; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 320000000 USDT)",
-      "price": 1.82,
-      "trend": "bullish",
-      "rsi": 38,
-      "macd": "Bullish Cross ↑",
-      "change24h": "3.80%"
-    },
-    {
-      "symbol": "TAO",
-      "decision": "NO_TRADE",
-      "confidence": 40,
-      "sentiment_score": 0,
-      "tech_score": 30,
-      "volume_score": 10,
-      "news_score": 0,
-      "macro_score": 0,
-      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.052000; RSI 43; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 180000000 USDT)",
-      "price": 420,
-      "trend": "bullish",
-      "rsi": 43,
-      "macd": "Bullish Cross ↑",
-      "change24h": "5.20%"
-    },
-    {
-      "symbol": "RNDR",
-      "decision": "NO_TRADE",
-      "confidence": 40,
-      "sentiment_score": 0,
-      "tech_score": 30,
-      "volume_score": 10,
-      "news_score": 0,
-      "macro_score": 0,
-      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.045000; RSI 35; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 210000000 USDT)",
-      "price": 9.5,
-      "trend": "bullish",
-      "rsi": 35,
-      "macd": "Bullish Cross ↑",
-      "change24h": "4.50%"
-    },
-    {
-      "symbol": "NEAR",
-      "decision": "NO_TRADE",
-      "confidence": 40,
-      "sentiment_score": 0,
-      "tech_score": 30,
-      "volume_score": 10,
-      "news_score": 0,
-      "macro_score": 0,
-      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.030000; RSI 49; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 210000000 USDT)",
-      "price": 5.8,
-      "trend": "bullish",
-      "rsi": 49,
-      "macd": "Bullish Cross ↑",
-      "change24h": "3.00%"
-    },
-    {
-      "symbol": "AGIX",
-      "decision": "NO_TRADE",
-      "confidence": 35,
-      "sentiment_score": 0,
-      "tech_score": 25,
-      "volume_score": 10,
-      "news_score": 0,
-      "macro_score": 0,
-      "reasoning": "Confidence Score: 35/100 → Decision: NO_TRADE\nTechnical: +25 (trend is neutral; +24h change 0.060000; RSI 62 (bullish); SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 330000000 USDT)",
-      "price": 0.85,
+      "reasoning": "Confidence Score: 15/100 → Decision: NO_TRADE\nTechnical: +15 (trend is neutral; +24h change 0.003242; RSI 43; SMA7 below SMA25 (bearish cross); price below SMA25)",
+      "price": 62608,
       "trend": "neutral",
-      "rsi": 62,
-      "macd": "Bullish Cross ↑",
-      "change24h": "6.00%"
+      "rsi": 42.61528179995545,
+      "macd": "Bearish Cross ↓",
+      "change24h": "0.32%"
     }
   ],
-  "last_prompt": "find ai trades",
-  "account_balance": 979.8939363579688,
+  "last_prompt": "check BTC",
+  "account_balance": 979.6061669410726,
   "conversation": [
     {
       "role": "user",
@@ -233,6 +169,86 @@
       "role": "assistant",
       "content": "💰 Buying FET\nPrice: $1.82\nPosition: 10.5538 FET ($19.21)\nRisk: $19.21 (2% of $960 capital)\n\n⚠️  Warnings:\n  - Confidence is low (40/100)\n\nProceed anyway? Say \"confirm buy FET\"\n",
       "time": "09:47:32"
+    },
+    {
+      "role": "user",
+      "content": "buy RNDR",
+      "time": "10:05:25"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying RNDR\nPrice: $9.22\nPosition: 2.1259 RNDR ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n⚠️  Warnings:\n  - Confidence is low (30/100)\n  - Trend is neutral (not ideal for long)\n\nProceed anyway? Say \"confirm buy RNDR\"\n",
+      "time": "10:05:27"
+    },
+    {
+      "role": "user",
+      "content": "check for ONDO",
+      "time": "10:05:48"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 SOL — WATCHLIST 50/100\n   bullish trend · RSI 67 · 24h 2.10% · Vol 50\n   strong technicals · volume growing\n🔴 CARDS — NO_TRADE 30/100\n   neutral trend · RSI 63 · 24h 2.00% · Vol 30\n🔴 BTC — NO_TRADE 25/100\n   bearish trend · RSI 57 · 24h 0.80% · Vol 25\n   volume growing\n🔴 SLX — NO_TRADE 10/100\n   bearish trend · RSI 31 · 24h -3.00% · Vol 10\n🔴 ARX — NO_TRADE 10/100\n   bearish trend · RSI 27 · 24h -1.00% · Vol 10\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "10:05:54"
+    },
+    {
+      "role": "user",
+      "content": "buy SOL",
+      "time": "10:08:50"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $150.42\nPosition: 0.1303 SOL ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n⚠️  Warnings:\n  - Confidence is moderate (50/100) — WATCHLIST\n\nProceed anyway? Say \"confirm buy SOL\"\n",
+      "time": "10:08:51"
+    },
+    {
+      "role": "user",
+      "content": "confirm buy SOL",
+      "time": "10:09:00"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $150.29\nPosition: 0.1304 SOL ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n✅ Order placed!\nSOL Trend: bullish\nRSI: 75\nVolume: $1200000000\n\nMonitoring. Auto TP at +5%, SL at -2%.",
+      "time": "10:09:01"
+    },
+    {
+      "role": "user",
+      "content": "check for ONDO",
+      "time": "10:18:10"
+    },
+    {
+      "role": "assistant",
+      "content": "🔴 BTC — NO_TRADE 45/100\n   bullish trend · RSI 57 · 24h 0.80% · Vol 45\n   strong technicals · volume growing\n🔴 ARX — NO_TRADE 35/100\n   bullish trend · RSI 65 · 24h -1.00% · Vol 35\n   strong technicals\n🔴 SOL — NO_TRADE 30/100\n   bearish trend · RSI 26 · 24h 2.10% · Vol 30\n   volume growing\n🔴 CARDS — NO_TRADE 25/100\n   neutral trend · RSI 50 · 24h 2.00% · Vol 25\n🔴 SLX — NO_TRADE 20/100\n   neutral trend · RSI 58 · 24h -3.00% · Vol 20\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "10:18:16"
+    },
+    {
+      "role": "user",
+      "content": "check for ONDO",
+      "time": "10:18:41"
+    },
+    {
+      "role": "assistant",
+      "content": "🔴 ONDO — NO_TRADE 10/100\n   bearish trend · RSI 53 · 24h -5.00% · Vol 10\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "10:19:03"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "10:36:23"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "10:37:01"
+    },
+    {
+      "role": "assistant",
+      "content": "🔴 BTC — NO_TRADE 15/100\n   neutral trend · RSI 43 · 24h 0.32% · Vol 15\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "10:37:04"
+    },
+    {
+      "role": "assistant",
+      "content": "🔴 BTC — NO_TRADE 15/100\n   neutral trend · RSI 43 · 24h 0.32% · Vol 15\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "10:37:13"
     }
   ],
   "trades": [
@@ -243,6 +259,7 @@
       "size": 0.047619047619047616,
       "price": 420,
       "pnl": -9.00952380952381,
+      "exit_price": 0,
       "status": "CLOSED",
       "created_at": "2026-06-22T21:38:30.570746+01:00"
     },
@@ -253,8 +270,20 @@
       "size": 0.13243243243243244,
       "price": 148,
       "pnl": -0.1060636420312033,
+      "exit_price": 0,
       "status": "CLOSED",
       "created_at": "2026-06-24T09:43:25.590054+01:00"
+    },
+    {
+      "id": "20260624100901",
+      "symbol": "SOLUSDT",
+      "side": "buy",
+      "size": 0.13039690107383484,
+      "price": 150.29405274027516,
+      "pnl": -0.2877694168961955,
+      "exit_price": 0,
+      "status": "CLOSED",
+      "created_at": "2026-06-24T10:09:01.410707+01:00"
     }
   ],
   "decision_log": [
@@ -662,6 +691,149 @@
       "sentiment": 0,
       "technical": 30,
       "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:05:50.257205+01:00",
+      "symbol": "CARDS",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:05:51.259514+01:00",
+      "symbol": "SLX",
+      "total": 10,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 0,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:05:52.262402+01:00",
+      "symbol": "ARX",
+      "total": 10,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 0,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:05:53.270992+01:00",
+      "symbol": "SOL",
+      "total": 50,
+      "decision": "WATCHLIST",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 20,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:05:54.274157+01:00",
+      "symbol": "BTC",
+      "total": 25,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 5,
+      "volume": 20,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:18:12.152341+01:00",
+      "symbol": "CARDS",
+      "total": 25,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 15,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:18:13.154731+01:00",
+      "symbol": "SLX",
+      "total": 20,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 10,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:18:14.156381+01:00",
+      "symbol": "ARX",
+      "total": 35,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 25,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:18:15.159366+01:00",
+      "symbol": "BTC",
+      "total": 45,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 25,
+      "volume": 20,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:18:16.164048+01:00",
+      "symbol": "SOL",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 10,
+      "volume": 20,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:19:03.687138+01:00",
+      "symbol": "ONDO",
+      "total": 10,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 0,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:37:04.201398+01:00",
+      "symbol": "BTC",
+      "total": 15,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 15,
+      "volume": 0,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T10:37:13.78704+01:00",
+      "symbol": "BTC",
+      "total": 15,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 15,
+      "volume": 0,
       "news": 0,
       "macro": 0
     }

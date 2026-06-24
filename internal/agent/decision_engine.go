@@ -332,6 +332,8 @@ func (d *DecisionEngine) signalToBullet(s models.SignalScore) string {
 			trendPart = "Bearish"
 		} else if strings.Contains(reason, "trend is neutral") {
 			trendPart = "Neutral"
+		} else if strings.Contains(reason, "trend is unknown") {
+			trendPart = "Unknown"
 		}
 
 		tech.WriteString(fmt.Sprintf("Technical: %s", trendPart))
@@ -347,9 +349,9 @@ func (d *DecisionEngine) signalToBullet(s models.SignalScore) string {
 			tech.WriteString("\n    MACD: Bearish Cross")
 		}
 
-		if strings.Contains(reason, "price above SMA25") {
+		if strings.Contains(reason, "price above SMA25") || strings.Contains(reason, "price above SMA") {
 			tech.WriteString("\n    Above SMA25")
-		} else if strings.Contains(reason, "price below SMA25") {
+		} else if strings.Contains(reason, "price below SMA25") || strings.Contains(reason, "price below SMA") {
 			tech.WriteString("\n    Below SMA25")
 		}
 
