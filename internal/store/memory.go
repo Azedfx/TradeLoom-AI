@@ -52,8 +52,8 @@ func NewMemoryStore(logPath string, statePath string, defaultCapital float64) *M
 		s.logFile = f
 		info, _ := f.Stat()
 		if info.Size() == 0 {
-			fmt.Fprintln(f, "timestamp,symbol,direction,price,quantity,pnl,status")
-		}
+				fmt.Fprintln(f, "timestamp,symbol,direction,price,quantity,pnl,balance_change,status")
+			}
 	}
 
 	return s
@@ -160,12 +160,14 @@ func (s *MemoryStore) CloseTrade(id string, exitPrice, pnl float64) {
 			t := s.trades[i]
 			lockedCapital := t.Size * t.Price
 			s.AccountBalance += lockedCapital + pnl
+			t.BalanceChange = pnl
+			s.trades[i].BalanceChange = pnl
 			s.mu.Unlock()
 
 			if s.logFile != nil {
-				fmt.Fprintf(s.logFile, "%s,%s,close,%.8f,%.8f,%.2f,%s\n",
+				fmt.Fprintf(s.logFile, "%s,%s,close,%.8f,%.8f,%.2f,%.2f,%s\n",
 					time.Now().Format("2006-01-02 15:04:05"),
-					t.Symbol, exitPrice, t.Size, pnl, "CLOSED")
+					t.Symbol, exitPrice, t.Size, pnl, t.BalanceChange, "CLOSED")
 			}
 			s.mu.Lock()
 			s.persist()
@@ -177,15 +179,17 @@ func (s *MemoryStore) CloseTrade(id string, exitPrice, pnl float64) {
 }
 
 func (s *MemoryStore) LogTrade(symbol, side string, size, price, pnl float64, status string) {
+	balanceChange := -size * price
 	t := models.Trade{
-		ID:        time.Now().Format("20060102150405"),
-		Symbol:    symbol,
-		Side:      side,
-		Size:      size,
-		Price:     price,
-		PnL:       pnl,
-		Status:    status,
-		CreatedAt: time.Now(),
+		ID:            time.Now().Format("20060102150405"),
+		Symbol:        symbol,
+		Side:          side,
+		Size:          size,
+		Price:         price,
+		PnL:           pnl,
+		Status:        status,
+		BalanceChange: balanceChange,
+		CreatedAt:     time.Now(),
 	}
 	s.AddTrade(t)
 	s.appendToLog(t)
@@ -197,9 +201,9 @@ func (s *MemoryStore) appendToLog(t models.Trade) {
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	fmt.Fprintf(s.logFile, "%s,%s,%s,%.8f,%.8f,%.2f,%s\n",
+	fmt.Fprintf(s.logFile, "%s,%s,%s,%.8f,%.8f,%.2f,%.2f,%s\n",
 		t.CreatedAt.Format("2006-01-02 15:04:05"),
-		t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.Status)
+		t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.BalanceChange, t.Status)
 }
 
 func (s *MemoryStore) GetAllTrades() []models.Trade {

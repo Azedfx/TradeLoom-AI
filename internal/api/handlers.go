@@ -387,11 +387,11 @@ func (h *StrategyHandler) ExportTradesCSV(c *gin.Context) {
 	c.Header("Content-Disposition", "attachment; filename=trade_log.csv")
 
 	var b strings.Builder
-	b.WriteString("timestamp,symbol,direction,price,quantity,pnl,status\n")
+	b.WriteString("timestamp,symbol,direction,price,quantity,pnl,balance_change,status\n")
 	for _, t := range trades {
-		b.WriteString(fmt.Sprintf("%s,%s,%s,%.8f,%.8f,%.2f,%s\n",
+		b.WriteString(fmt.Sprintf("%s,%s,%s,%.8f,%.8f,%.2f,%.2f,%s\n",
 			t.CreatedAt.Format("2006-01-02 15:04:05"),
-			t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.Status))
+			t.Symbol, t.Side, t.Price, t.Size, t.PnL, t.BalanceChange, t.Status))
 	}
 	c.String(http.StatusOK, b.String())
 }

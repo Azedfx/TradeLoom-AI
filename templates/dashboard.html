@@ -834,29 +834,35 @@ async function refresh(){
     // Trades
     const ta=document.getElementById('trade-area');
     if(trades.length){
-      const openTrades=trades.filter(t=>t.status==='OPEN');
-      const closedTrades=trades.filter(t=>t.status==='CLOSED');
-      let h='';
-      if(openTrades.length){
-        h+='<div style="font-size:9px;color:var(--accent-green);font-weight:600;margin-bottom:4px">● OPEN ('+openTrades.length+')</div>';
-        [...openTrades].reverse().slice(0,4).forEach(t=>{
-          const side='long';
-          h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':'-'}${Math.abs(t.pnl).toFixed(2)}</span></div>`;
-        });
-      }
-      if(closedTrades.length){
-        h+='<div style="font-size:9px;color:var(--text-muted);font-weight:600;margin:4px 0">CLOSED</div>';
-        [...closedTrades].reverse().slice(0,5).forEach(t=>{
-          const side='long';
-          const exitInfo=t.exit_price?' → '+fmtPrice(t.exit_price):'';
-          h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}${exitInfo}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':'-'}$${Math.abs(t.pnl).toFixed(2)}</span><span class="trade-status">CLOSED</span></div>`;
-        });
-      }
-      if(!openTrades.length&&!closedTrades.length){
-        ta.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>No trades yet. Try "buy SOL"</div></div>';
-      } else {
-        ta.innerHTML=h;
-      }
+      const all=[...trades].reverse();
+      let h='<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="color:var(--text-muted);border-bottom:1px solid var(--border-color)">';
+      h+='<th style="text-align:left;padding:2px 4px">Time</th>';
+      h+='<th style="text-align:left;padding:2px 4px">Pair</th>';
+      h+='<th style="text-align:left;padding:2px 4px">Side</th>';
+      h+='<th style="text-align:right;padding:2px 4px">Price</th>';
+      h+='<th style="text-align:right;padding:2px 4px">Qty</th>';
+      h+='<th style="text-align:right;padding:2px 4px">Balance Δ</th>';
+      h+='<th style="text-align:center;padding:2px 4px">Status</th>';
+      h+='</tr></thead><tbody>';
+      all.slice(0,20).forEach(t=>{
+        const ts=t.created_at?new Date(t.created_at).toLocaleTimeString():'?';
+        const side='LONG';
+        const balChg=t.balance_change||0;
+        const balStr=(balChg<0?'':balChg>0?'+':'')+'$'+Math.abs(balChg).toFixed(2);
+        const balCl=balChg>0?'color:var(--accent-green)':balChg<0?'color:var(--accent-red)':'color:var(--text-muted)';
+        const pCl=t.status==='OPEN'?'color:var(--accent-green)':'color:var(--text-muted)';
+        h+=`<tr style="border-bottom:1px solid var(--border-color)">`;
+        h+=`<td style="text-align:left;padding:2px 4px;white-space:nowrap">${ts}</td>`;
+        h+=`<td style="text-align:left;padding:2px 4px">${t.symbol.replace('USDT','')}</td>`;
+        h+=`<td style="text-align:left;padding:2px 4px;color:var(--accent-green)">${side}</td>`;
+        h+=`<td style="text-align:right;padding:2px 4px">${fmtPrice(t.price)}</td>`;
+        h+=`<td style="text-align:right;padding:2px 4px">${t.size.toFixed(4)}</td>`;
+        h+=`<td style="text-align:right;padding:2px 4px;${balCl}">${balStr}</td>`;
+        h+=`<td style="text-align:center;padding:2px 4px;${pCl}">${t.status}</td>`;
+        h+=`</tr>`;
+      });
+      h+='</tbody></table>';
+      ta.innerHTML=h;
     } else {
       ta.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>No trades yet. Try "buy SOL"</div></div>';
     }

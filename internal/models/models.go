@@ -43,15 +43,16 @@ type MarketPerception struct {
 }
 
 type Trade struct {
-	ID        string    `json:"id"`
-	Symbol    string    `json:"symbol"`
-	Side      string    `json:"side"`
-	Size      float64   `json:"size"`
-	Price     float64   `json:"price"`
-	PnL       float64   `json:"pnl"`
-	ExitPrice float64   `json:"exit_price"`
-	Status    string    `json:"status"` // "OPEN", "CLOSED"
-	CreatedAt time.Time `json:"created_at"`
+	ID             string    `json:"id"`
+	Symbol         string    `json:"symbol"`
+	Side           string    `json:"side"`
+	Size           float64   `json:"size"`
+	Price          float64   `json:"price"`
+	PnL            float64   `json:"pnl"`
+	ExitPrice      float64   `json:"exit_price"`
+	Status         string    `json:"status"` // "OPEN", "CLOSED"
+	BalanceChange  float64   `json:"balance_change"` // change to account balance on this trade
+	CreatedAt      time.Time `json:"created_at"`
 }
 
 type Position struct {
