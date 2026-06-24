@@ -178,10 +178,10 @@ func (l *LLMClient) EvaluateTrade(
 
 	userPrompt := fmt.Sprintf(`Analyze %s using Skill Hub frameworks.
 
-Symbol: %s Trend: %s RSI: %.1f 24h: %s Vol: %sUSDT Price: $%.2f MACD: %s (SMA7:%.2f SMA25:%.2f)
-F&G: %.0f/100 (%s) Sentiment: %.2f
+Trend: %s | RSI: %.1f | 24h: %s | Vol: %sUSDT | Price: $%.2f | MACD: %s | SMA7: %.2f | SMA25: %.2f
+F&G: %.0f/100 (%s) | Sentiment: %.2f
 News: %s
-Macro: Risk %s AvgVol: $%.0f
+Macro: Risk %s | AvgVol: $%.0f
 
 {"decision":"BUY|WATCHLIST|NO_TRADE","confidence":<0-100>,"reasoning":"<2-3 sentences>","signals":[{"name":"Technical","score":<0-30>,"reason":""},{"name":"Sentiment","score":<0-30>,"reason":""},{"name":"Volume","score":<0-20>,"reason":""},{"name":"News","score":<0-20>,"reason":""},{"name":"Macro","score":<0-10>,"reason":""}]}`,
 		symbol, trend, rsi, change24h, volume, price,
