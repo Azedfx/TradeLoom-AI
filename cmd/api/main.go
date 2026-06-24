@@ -23,7 +23,7 @@ func main() {
 	llmClient := llm.NewLLMClient(cfg.LLMApiKey(), cfg.LLMBaseURL, cfg.LLMModel)
 	strategyCompiler := &agent.StrategyCompiler{}
 	marketData := bitget.NewMarketData()
-	decisionEngine := agent.NewDecisionEngine(marketData)
+	decisionEngine := agent.NewDecisionEngine(marketData, llmClient)
 	tradeExecutor := &bitget.TradeExecutor{}
 	mcpClient := bitget.NewMCPClient("https://hackathon.bitgetops.com/mcp")
 	memStore := store.NewMemoryStore("trade_log.csv", "data/state.json", cfg.DefaultCapital)

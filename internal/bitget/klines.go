@@ -17,46 +17,45 @@ type Kline struct {
 }
 
 func (m *MarketData) GetKlines(symbol, granularity string, limit int) ([]Kline, error) {
-	// try Bitget first
 	url := fmt.Sprintf("https://api.bitget.com/api/v2/spot/market/candles?symbol=%s&granularity=%s&limit=%d",
 		symbol, granularity, limit)
 	resp, err := m.httpCli.Get(url)
-	if err == nil {
-		defer resp.Body.Close()
-		if resp.StatusCode == 200 {
-			var raw struct {
-				Data [][]string `json:"data"`
-			}
-			if err := json.NewDecoder(resp.Body).Decode(&raw); err == nil && len(raw.Data) > 0 {
-				klines := make([]Kline, 0, len(raw.Data))
-				for _, d := range raw.Data {
-					if len(d) < 6 {
-						continue
-					}
-					k := Kline{}
-					k.Timestamp, _ = strconv.ParseInt(d[0], 10, 64)
-					k.Open, _ = strconv.ParseFloat(d[1], 64)
-					k.High, _ = strconv.ParseFloat(d[2], 64)
-					k.Low, _ = strconv.ParseFloat(d[3], 64)
-					k.Close, _ = strconv.ParseFloat(d[4], 64)
-					k.Volume, _ = strconv.ParseFloat(d[5], 64)
-					klines = append(klines, k)
-				}
-				return klines, nil
-			}
+	if err != nil {
+		return nil, fmt.Errorf("bitget klines: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var raw struct {
+		Code string     `json:"code"`
+		Msg  string     `json:"msg"`
+		Data [][]string `json:"data"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
+		return nil, fmt.Errorf("bitget klines decode: %w", err)
+	}
+	if raw.Code != "00000" {
+		return nil, fmt.Errorf("bitget klines error: %s - %s", raw.Code, raw.Msg)
+	}
+
+	klines := make([]Kline, 0, len(raw.Data))
+	for _, d := range raw.Data {
+		if len(d) < 6 {
+			continue
 		}
+		k := Kline{}
+		k.Timestamp, _ = strconv.ParseInt(d[0], 10, 64)
+		k.Open, _ = strconv.ParseFloat(d[1], 64)
+		k.High, _ = strconv.ParseFloat(d[2], 64)
+		k.Low, _ = strconv.ParseFloat(d[3], 64)
+		k.Close, _ = strconv.ParseFloat(d[4], 64)
+		k.Volume, _ = strconv.ParseFloat(d[5], 64)
+		klines = append(klines, k)
 	}
 
-	// fall back to CoinGecko
-	cgKlines, cgErr := m.coinGecko.GetKlines(symbol)
-	if cgErr == nil && len(cgKlines) >= limit {
-		return cgKlines, nil
+	if len(klines) == 0 {
+		return nil, fmt.Errorf("bitget klines: no data for %s", symbol)
 	}
-
-	if cgErr != nil {
-		return nil, fmt.Errorf("Bitget and CoinGecko both failed — Bitget: %v, CoinGecko: %v", err, cgErr)
-	}
-	return nil, fmt.Errorf("insufficient data from all sources: %w", err)
+	return klines, nil
 }
 
 // CalculateRSI computes RSI for the given period
@@ -156,16 +155,6 @@ func (m *MarketData) GetTechnicalIndicators(symbol string) (*TechnicalIndicators
 		}
 		if v, ok := ticker["quoteVolume"].(string); ok {
 			volume, _ = strconv.ParseFloat(v, 64)
-		}
-	} else {
-		cgTicker, cgErr := m.coinGecko.GetTicker(symbol)
-		if cgErr == nil {
-			if lp, ok := cgTicker["lastPr"].(string); ok {
-				lastPrice, _ = strconv.ParseFloat(lp, 64)
-			}
-			if c, ok := cgTicker["change24h"].(string); ok {
-				change24h, _ = strconv.ParseFloat(c, 64)
-			}
 		}
 	}
 

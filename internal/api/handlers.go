@@ -335,13 +335,6 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 	decisions := h.store.GetDecisionLog()
 	opps, lastPrompt := h.store.GetLastOpportunities()
 
-	dataSource := "live"
-	demoFields := []string{}
-	if h.marketData != nil && h.marketData.UsingDemoData() {
-		dataSource = "demo"
-		demoFields = h.marketData.DemoFields()
-	}
-
 	var totalProfit, totalLoss float64
 	for _, t := range trades {
 		if t.Status == "CLOSED" {
@@ -367,8 +360,6 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 			"opportunities":   opps,
 			"lastPrompt":      lastPrompt,
 			"account_balance": h.store.AccountBalance,
-			"data_source":     dataSource,
-			"demo_fields":     demoFields,
 			"risk_policy": gin.H{
 				"default_capital":   h.defaultCapital,
 				"max_risk_percent": h.maxRiskPercent,

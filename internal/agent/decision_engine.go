@@ -1,41 +1,68 @@
 package agent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	"trade/internal/bitget"
+	"trade/internal/llm"
 	"trade/internal/models"
 )
 
 type DecisionEngine struct {
 	marketData *bitget.MarketData
+	llmClient  *llm.LLMClient
 }
 
-func NewDecisionEngine(md *bitget.MarketData) *DecisionEngine {
-	return &DecisionEngine{marketData: md}
+func NewDecisionEngine(md *bitget.MarketData, llmCli *llm.LLMClient) *DecisionEngine {
+	return &DecisionEngine{marketData: md, llmClient: llmCli}
 }
 
 func (d *DecisionEngine) EvaluateWithConfidence(market *models.MarketPerception) *models.ConfidenceScore {
+	if d.llmClient != nil {
+		score, err := d.evaluateWithLLM(market)
+		if err == nil {
+			return score
+		}
+	}
+
+	return d.evaluateRuleBased(market)
+}
+
+func (d *DecisionEngine) evaluateWithLLM(market *models.MarketPerception) (*models.ConfidenceScore, error) {
+	tech := market.Technical
+	if tech == nil {
+		tech = map[string]interface{}{}
+	}
+
+	sentJSON, _ := json.Marshal(market.Sentiment)
+	newsJSON, _ := json.Marshal(market.News)
+	macroJSON, _ := json.Marshal(market.Macro)
+
+	symbol := ""
+	if s, ok := tech["symbol"].(string); ok {
+		symbol = s
+	}
+
+	return d.llmClient.EvaluateTrade(symbol, tech, sentJSON, newsJSON, macroJSON)
+}
+
+func (d *DecisionEngine) evaluateRuleBased(market *models.MarketPerception) *models.ConfidenceScore {
 	signals := []models.SignalScore{}
 
-	// 1. Sentiment analysis (up to +30)
 	sig := d.scoreSentiment(market)
 	signals = append(signals, sig)
 
-	// 2. Technical trend (up to +30)
 	sig2 := d.scoreTechnical(market)
 	signals = append(signals, sig2)
 
-	// 3. Volume / momentum (up to +20)
 	sig3 := d.scoreVolume(market)
 	signals = append(signals, sig3)
 
-	// 4. News (up to +20)
 	sig4 := d.scoreNews(market)
 	signals = append(signals, sig4)
 
-	// 5. Macro (up to +10 bonus)
 	sig5 := d.scoreMacro(market)
 	signals = append(signals, sig5)
 
@@ -388,5 +415,3 @@ func extractFloat(s, prefix string) float64 {
 	fmt.Sscanf(rest, "%f", &val)
 	return val
 }
-
-

@@ -2,89 +2,24 @@
   "last_opportunities": [
     {
       "symbol": "BTC",
-      "decision": "NO_TRADE",
-      "confidence": 15,
-      "sentiment_score": 0,
-      "tech_score": 15,
-      "volume_score": 0,
-      "news_score": 0,
-      "macro_score": 0,
-      "reasoning": "Confidence Score: 15/100 → Decision: NO_TRADE\nTechnical: +15 (trend is neutral; +24h change 0.003242; RSI 43; SMA7 below SMA25 (bearish cross); price below SMA25)",
-      "price": 62608,
+      "decision": "WATCHLIST",
+      "confidence": 39,
+      "sentiment_score": 10,
+      "tech_score": 14,
+      "volume_score": 6,
+      "news_score": 5,
+      "macro_score": 4,
+      "reasoning": "Confidence Score: 39/100 → Decision: WATCHLIST\nTechnical: +14 (Positive MACD hints at upside potential, but a 46 trend score and missing RSI indicate range-bound price action without clear overbought/oversold extremes.)\nSentiment: +10 (Fear \u0026 Greed near 57 reflects neutral retail positioning with no contrarian fear/greed divergence to exploit.)\nVolume: +6 (Ambiguous daily volume lacks sustained accumulation signatures, failing to confirm smart money conviction behind current price levels.)\nNews: +5 (No active structural catalysts or sector narratives are present to drive directional volatility or trend continuation.)\nMacro: +4 (Zero risk-on/off alignment indicates a neutral macro backdrop, offering no tailwind for aggressive long exposure.)\nSkill Hub Synthesis: Technical momentum is slightly positive per the MACD crossover, but a flat trend score, missing RSI, and unconfirmed volume prevent high-conviction signals. Neutral sentiment (~57 F\u0026G) and absent macro/news catalysts suggest a consolidation phase rather than an imminent breakout. Maintain a watchlist posture until volume expansion and clearer price structure confirm directional bias.",
+      "price": 61380,
       "trend": "neutral",
-      "rsi": 42.61528179995545,
+      "rsi": 46.11604205299996,
       "macd": "Bearish Cross ↓",
-      "change24h": "0.32%"
+      "change24h": "-1.78%"
     }
   ],
   "last_prompt": "check BTC",
   "account_balance": 960.0140436022511,
   "conversation": [
-    {
-      "role": "user",
-      "content": "find ai trades",
-      "time": "21:38:20"
-    },
-    {
-      "role": "assistant",
-      "content": "📊 Analyzed 5 opportunities\n\n🔴 #1 FET\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $1.82 | Trend: bullish | RSI: 38 | MACD: Bullish Cross ↑ | 24h: 3.80%\n🔴 #2 TAO\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $420.00 | Trend: bullish | RSI: 43 | MACD: Bullish Cross ↑ | 24h: 5.20%\n🔴 #3 RNDR\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $9.50 | Trend: bullish | RSI: 35 | MACD: Bullish Cross ↑ | 24h: 4.50%\n🔴 #4 NEAR\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $5.80 | Trend: bullish | RSI: 49 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #5 AGIX\n   Confidence: 35/100 — NO_TRADE\n   Sentiment:+0  Tech:+25  Volume:+10  News:+0  Macro:+0\n   Price: $0.85 | Trend: neutral | RSI: 62 | MACD: Bullish Cross ↑ | 24h: 6.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
-      "time": "21:38:26"
-    },
-    {
-      "role": "user",
-      "content": "buy FET",
-      "time": "21:38:26"
-    },
-    {
-      "role": "assistant",
-      "content": "💰 Buying FET\nPrice: $1.82\nPosition: 10.9890 FET ($20.00)\nRisk: $20.00 (2% of $1000 capital)\n\n⚠️  Warnings:\n  - Confidence is low (40/100)\n\nProceed anyway? Say \"confirm buy FET\"\n",
-      "time": "21:38:28"
-    },
-    {
-      "role": "user",
-      "content": "short TAO",
-      "time": "21:38:28"
-    },
-    {
-      "role": "assistant",
-      "content": "🔻 Shorting TAO\nPrice: $420.00\nPosition: 0.0476 TAO ($20.00)\nRisk: $20.00 (2% of $1000 capital)\n\n⚠️  Warnings:\n  - Confidence is low (40/100)\n  - Trend is bullish (not ideal for short)\n\nProceed anyway? Say \"confirm short TAO\"\n",
-      "time": "21:38:29"
-    },
-    {
-      "role": "user",
-      "content": "confirm short TAO",
-      "time": "21:38:29"
-    },
-    {
-      "role": "assistant",
-      "content": "🔻 Shorting TAO\nPrice: $420.00\nPosition: 0.0476 TAO ($20.00)\nRisk: $20.00 (2% of $1000 capital)\n\n✅ Order placed!\nTAO Trend: bullish\nRSI: 43\nVolume: $180000000\n\nMonitoring. Auto TP at -5%, SL at +2%.",
-      "time": "21:38:30"
-    },
-    {
-      "role": "user",
-      "content": "fine meme",
-      "time": "21:39:49"
-    },
-    {
-      "role": "assistant",
-      "content": "📊 Analyzed 4 opportunities\n\n🔴 #1 SHIB\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $0.00 | Trend: bullish | RSI: 39 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #2 PEPE\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $0.00 | Trend: bullish | RSI: 43 | MACD: Neutral | 24h: -4.00%\n🔴 #3 WIF\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+0  News:+0  Macro:+0\n   Price: $2.45 | Trend: bullish | RSI: 45 | MACD: Bullish Cross ↑ | 24h: 5.00%\n🔴 #4 DOGE\n   Confidence: 25/100 — NO_TRADE\n   Sentiment:+0  Tech:+15  Volume:+10  News:+0  Macro:+0\n   Price: $0.14 | Trend: neutral | RSI: 42 | MACD: Bullish Cross ↑ | 24h: 2.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
-      "time": "21:39:53"
-    },
-    {
-      "role": "user",
-      "content": "find rwa",
-      "time": "21:40:08"
-    },
-    {
-      "role": "assistant",
-      "content": "📊 Analyzed 3 opportunities\n\n🔴 #1 MKR\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $1800.00 | Trend: bullish | RSI: 69 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #2 ONDO\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $1.20 | Trend: bullish | RSI: 59 | MACD: Neutral | 24h: -5.00%\n🔴 #3 CFG\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $0.35 | Trend: bullish | RSI: 53 | MACD: Neutral | 24h: -4.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
-      "time": "21:40:12"
-    },
-    {
-      "role": "user",
-      "content": "gaming",
-      "time": "21:40:48"
-    },
     {
       "role": "assistant",
       "content": "📊 Analyzed 3 opportunities\n\n🔴 #1 SAND\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $0.42 | Trend: bullish | RSI: 69 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #2 IMX\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $1.80 | Trend: bullish | RSI: 53 | MACD: Neutral | 24h: -4.00%\n🔴 #3 GALA\n   Confidence: 25/100 — NO_TRADE\n   Sentiment:+0  Tech:+15  Volume:+10  News:+0  Macro:+0\n   Price: $0.04 | Trend: neutral | RSI: 72 | MACD: Neutral | 24h: -3.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
@@ -269,6 +204,71 @@
       "role": "assistant",
       "content": "💰 Buying BTC\nPrice: $61455.00\nPosition: 0.0003 BTC ($19.59)\nRisk: $19.59 (2% of $980 capital)\n\n✅ Order placed!\nBTC Trend: neutral\nRSI: 37\nVolume: $0\n\nMonitoring. Auto TP at +5%, SL at -2%.",
       "time": "14:46:06"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "15:00:43"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 BTC — WATCHLIST 40/100\n   neutral trend · RSI 46 · 24h -1.85% · Vol 20\n   bullish sentiment\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "15:01:11"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "15:01:39"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 BTC — WATCHLIST 40/100\n   neutral trend · RSI 46 · 24h -1.95% · Vol 20\n   bullish sentiment\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "15:02:15"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "15:05:27"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "15:06:17"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 BTC — WATCHLIST 38/100\n   neutral trend · RSI 46 · 24h -1.77% · Vol 22\n   bullish sentiment · volume growing · positive narrative\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "15:06:38"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 BTC — WATCHLIST 40/100\n   neutral trend · RSI 46 · 24h -1.84% · Vol 17\n   bullish sentiment · positive narrative\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "15:07:31"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "15:09:17"
+    },
+    {
+      "role": "user",
+      "content": "find tokens",
+      "time": "15:09:45"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 BTC — WATCHLIST 40/100\n   neutral trend · RSI 46 · 24h -1.91% · Vol 20\n   bullish sentiment\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "15:10:13"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "15:10:34"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 BTC — WATCHLIST 39/100\n   neutral trend · RSI 46 · 24h -1.78% · Vol 20\n   bullish sentiment · positive narrative\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
+      "time": "15:12:06"
     }
   ],
   "trades": [
@@ -867,6 +867,72 @@
       "volume": 0,
       "news": 0,
       "macro": 0
+    },
+    {
+      "time": "2026-06-24T15:01:11.619692+01:00",
+      "symbol": "BTC",
+      "total": 40,
+      "decision": "WATCHLIST",
+      "sentiment": 20,
+      "technical": 10,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T15:02:15.066644+01:00",
+      "symbol": "BTC",
+      "total": 40,
+      "decision": "WATCHLIST",
+      "sentiment": 20,
+      "technical": 10,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T15:06:38.153901+01:00",
+      "symbol": "BTC",
+      "total": 38,
+      "decision": "WATCHLIST",
+      "sentiment": 15,
+      "technical": 10,
+      "volume": 12,
+      "news": 10,
+      "macro": 5
+    },
+    {
+      "time": "2026-06-24T15:07:31.163412+01:00",
+      "symbol": "BTC",
+      "total": 40,
+      "decision": "WATCHLIST",
+      "sentiment": 14,
+      "technical": 8,
+      "volume": 9,
+      "news": 5,
+      "macro": 4
+    },
+    {
+      "time": "2026-06-24T15:10:13.415017+01:00",
+      "symbol": "BTC",
+      "total": 40,
+      "decision": "WATCHLIST",
+      "sentiment": 20,
+      "technical": 10,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-24T15:12:06.005934+01:00",
+      "symbol": "BTC",
+      "total": 39,
+      "decision": "WATCHLIST",
+      "sentiment": 10,
+      "technical": 14,
+      "volume": 6,
+      "news": 5,
+      "macro": 4
     }
   ]
 }
