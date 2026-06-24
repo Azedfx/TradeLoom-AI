@@ -26,7 +26,18 @@ func main() {
 	decisionEngine := agent.NewDecisionEngine(marketData, llmClient)
 	tradeExecutor := &bitget.TradeExecutor{}
 	mcpClient := bitget.NewMCPClient("https://hackathon.bitgetops.com/mcp")
-	memStore := store.NewMemoryStore("trade_log.csv", "data/state.json", cfg.DefaultCapital)
+	var redisStore *store.RedisStore
+	if cfg.RedisURL != "" {
+		var err error
+		redisStore, err = store.NewRedisStore(cfg.RedisURL)
+		if err != nil {
+			log.Printf("redis persistence unavailable: %v (continuing without)", err)
+		} else {
+			log.Println("remote persistence enabled via Redis")
+			defer redisStore.Close()
+		}
+	}
+	memStore := store.NewMemoryStore("trade_log.csv", "data/state.json", cfg.DefaultCapital, redisStore)
 
 	monitor := agent.NewMonitor(
 		memStore,

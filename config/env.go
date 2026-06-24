@@ -19,6 +19,7 @@ type Config struct {
 	StopLossPct     float64 `envconfig:"STOP_LOSS_PERCENT" default:"2"`
 	MonitorInterval int     `envconfig:"MONITOR_INTERVAL_SECONDS" default:"10"`
 	Port            string `envconfig:"PORT" default:":8040"`
+	RedisURL        string `envconfig:"REDIS_URL"`
 }
 
 func (c *Config) LLMApiKey() string {

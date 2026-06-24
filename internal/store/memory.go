@@ -21,6 +21,7 @@ type MemoryStore struct {
 	AccountBalance    float64              `json:"account_balance"`
 	Conversation      []models.ChatMessage `json:"conversation"`
 	statePath         string
+	remoteStore       remotePersister
 }
 
 type storeSnapshot struct {
@@ -32,7 +33,13 @@ type storeSnapshot struct {
 	DecisionLog       []models.DecisionRecord `json:"decision_log"`
 }
 
-func NewMemoryStore(logPath string, statePath string, defaultCapital float64) *MemoryStore {
+type remotePersister interface {
+	Load() (*storeSnapshot, error)
+	Save(*storeSnapshot) error
+	SaveRaw([]byte) error
+}
+
+func NewMemoryStore(logPath string, statePath string, defaultCapital float64, remote ...remotePersister) *MemoryStore {
 	if defaultCapital <= 0 {
 		defaultCapital = 1000
 	}
@@ -41,8 +48,14 @@ func NewMemoryStore(logPath string, statePath string, defaultCapital float64) *M
 		AccountBalance: defaultCapital,
 		statePath:      statePath,
 	}
+	if len(remote) > 0 && remote[0] != nil {
+		s.remoteStore = remote[0]
+	}
 
 	// Load persisted state
+	if s.remoteStore != nil {
+		s.loadRemoteState()
+	}
 	if statePath != "" {
 		s.loadState()
 	}
@@ -59,15 +72,15 @@ func NewMemoryStore(logPath string, statePath string, defaultCapital float64) *M
 	return s
 }
 
-func (s *MemoryStore) loadState() {
-	data, err := os.ReadFile(s.statePath)
+func (s *MemoryStore) loadRemoteState() {
+	snap, err := s.remoteStore.Load()
 	if err != nil {
-		return // file doesn't exist yet
-	}
-	var snap storeSnapshot
-	if err := json.Unmarshal(data, &snap); err != nil {
 		return
 	}
+	s.applySnapshot(snap)
+}
+
+func (s *MemoryStore) applySnapshot(snap *storeSnapshot) {
 	s.LastOpportunities = snap.LastOpportunities
 	s.LastPrompt = snap.LastPrompt
 	if snap.AccountBalance > 0 {
@@ -78,17 +91,39 @@ func (s *MemoryStore) loadState() {
 	s.decisionLog = snap.DecisionLog
 }
 
-func (s *MemoryStore) persist() {
-	if s.statePath == "" {
+func (s *MemoryStore) loadState() {
+	data, err := os.ReadFile(s.statePath)
+	if err != nil {
+		return // file doesn't exist yet
+	}
+	var snap storeSnapshot
+	if err := json.Unmarshal(data, &snap); err != nil {
 		return
 	}
-	snap := storeSnapshot{
+	s.applySnapshot(&snap)
+}
+
+func (s *MemoryStore) snapshot() storeSnapshot {
+	return storeSnapshot{
 		LastOpportunities: s.LastOpportunities,
 		LastPrompt:        s.LastPrompt,
 		AccountBalance:    s.AccountBalance,
 		Conversation:      s.Conversation,
 		Trades:            s.trades,
 		DecisionLog:       s.decisionLog,
+	}
+}
+
+func (s *MemoryStore) persist() {
+	snap := s.snapshot()
+	if s.remoteStore != nil {
+		data, err := json.Marshal(snap)
+		if err == nil {
+			go s.remoteStore.SaveRaw(data)
+		}
+	}
+	if s.statePath == "" {
+		return
 	}
 	data, err := json.MarshalIndent(snap, "", "  ")
 	if err != nil {
