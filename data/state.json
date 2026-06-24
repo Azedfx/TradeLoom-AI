@@ -1,0 +1,669 @@
+{
+  "last_opportunities": [
+    {
+      "symbol": "FET",
+      "decision": "NO_TRADE",
+      "confidence": 40,
+      "sentiment_score": 0,
+      "tech_score": 30,
+      "volume_score": 10,
+      "news_score": 0,
+      "macro_score": 0,
+      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.038000; RSI 38; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 320000000 USDT)",
+      "price": 1.82,
+      "trend": "bullish",
+      "rsi": 38,
+      "macd": "Bullish Cross ↑",
+      "change24h": "3.80%"
+    },
+    {
+      "symbol": "TAO",
+      "decision": "NO_TRADE",
+      "confidence": 40,
+      "sentiment_score": 0,
+      "tech_score": 30,
+      "volume_score": 10,
+      "news_score": 0,
+      "macro_score": 0,
+      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.052000; RSI 43; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 180000000 USDT)",
+      "price": 420,
+      "trend": "bullish",
+      "rsi": 43,
+      "macd": "Bullish Cross ↑",
+      "change24h": "5.20%"
+    },
+    {
+      "symbol": "RNDR",
+      "decision": "NO_TRADE",
+      "confidence": 40,
+      "sentiment_score": 0,
+      "tech_score": 30,
+      "volume_score": 10,
+      "news_score": 0,
+      "macro_score": 0,
+      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.045000; RSI 35; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 210000000 USDT)",
+      "price": 9.5,
+      "trend": "bullish",
+      "rsi": 35,
+      "macd": "Bullish Cross ↑",
+      "change24h": "4.50%"
+    },
+    {
+      "symbol": "NEAR",
+      "decision": "NO_TRADE",
+      "confidence": 40,
+      "sentiment_score": 0,
+      "tech_score": 30,
+      "volume_score": 10,
+      "news_score": 0,
+      "macro_score": 0,
+      "reasoning": "Confidence Score: 40/100 → Decision: NO_TRADE\nTechnical: +30 (trend is bullish; +24h change 0.030000; RSI 49; SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 210000000 USDT)",
+      "price": 5.8,
+      "trend": "bullish",
+      "rsi": 49,
+      "macd": "Bullish Cross ↑",
+      "change24h": "3.00%"
+    },
+    {
+      "symbol": "AGIX",
+      "decision": "NO_TRADE",
+      "confidence": 35,
+      "sentiment_score": 0,
+      "tech_score": 25,
+      "volume_score": 10,
+      "news_score": 0,
+      "macro_score": 0,
+      "reasoning": "Confidence Score: 35/100 → Decision: NO_TRADE\nTechnical: +25 (trend is neutral; +24h change 0.060000; RSI 62 (bullish); SMA7 above SMA25 (bullish cross); price above SMA25)\nVolume: +10 (moderate volume: 330000000 USDT)",
+      "price": 0.85,
+      "trend": "neutral",
+      "rsi": 62,
+      "macd": "Bullish Cross ↑",
+      "change24h": "6.00%"
+    }
+  ],
+  "last_prompt": "find ai trades",
+  "account_balance": 960.4,
+  "conversation": [
+    {
+      "role": "user",
+      "content": "find ai trades",
+      "time": "21:38:20"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 5 opportunities\n\n🔴 #1 FET\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $1.82 | Trend: bullish | RSI: 38 | MACD: Bullish Cross ↑ | 24h: 3.80%\n🔴 #2 TAO\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $420.00 | Trend: bullish | RSI: 43 | MACD: Bullish Cross ↑ | 24h: 5.20%\n🔴 #3 RNDR\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $9.50 | Trend: bullish | RSI: 35 | MACD: Bullish Cross ↑ | 24h: 4.50%\n🔴 #4 NEAR\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $5.80 | Trend: bullish | RSI: 49 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #5 AGIX\n   Confidence: 35/100 — NO_TRADE\n   Sentiment:+0  Tech:+25  Volume:+10  News:+0  Macro:+0\n   Price: $0.85 | Trend: neutral | RSI: 62 | MACD: Bullish Cross ↑ | 24h: 6.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:38:26"
+    },
+    {
+      "role": "user",
+      "content": "buy FET",
+      "time": "21:38:26"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying FET\nPrice: $1.82\nPosition: 10.9890 FET ($20.00)\nRisk: $20.00 (2% of $1000 capital)\n\n⚠️  Warnings:\n  - Confidence is low (40/100)\n\nProceed anyway? Say \"confirm buy FET\"\n",
+      "time": "21:38:28"
+    },
+    {
+      "role": "user",
+      "content": "short TAO",
+      "time": "21:38:28"
+    },
+    {
+      "role": "assistant",
+      "content": "🔻 Shorting TAO\nPrice: $420.00\nPosition: 0.0476 TAO ($20.00)\nRisk: $20.00 (2% of $1000 capital)\n\n⚠️  Warnings:\n  - Confidence is low (40/100)\n  - Trend is bullish (not ideal for short)\n\nProceed anyway? Say \"confirm short TAO\"\n",
+      "time": "21:38:29"
+    },
+    {
+      "role": "user",
+      "content": "confirm short TAO",
+      "time": "21:38:29"
+    },
+    {
+      "role": "assistant",
+      "content": "🔻 Shorting TAO\nPrice: $420.00\nPosition: 0.0476 TAO ($20.00)\nRisk: $20.00 (2% of $1000 capital)\n\n✅ Order placed!\nTAO Trend: bullish\nRSI: 43\nVolume: $180000000\n\nMonitoring. Auto TP at -5%, SL at +2%.",
+      "time": "21:38:30"
+    },
+    {
+      "role": "user",
+      "content": "fine meme",
+      "time": "21:39:49"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 4 opportunities\n\n🔴 #1 SHIB\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $0.00 | Trend: bullish | RSI: 39 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #2 PEPE\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $0.00 | Trend: bullish | RSI: 43 | MACD: Neutral | 24h: -4.00%\n🔴 #3 WIF\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+0  News:+0  Macro:+0\n   Price: $2.45 | Trend: bullish | RSI: 45 | MACD: Bullish Cross ↑ | 24h: 5.00%\n🔴 #4 DOGE\n   Confidence: 25/100 — NO_TRADE\n   Sentiment:+0  Tech:+15  Volume:+10  News:+0  Macro:+0\n   Price: $0.14 | Trend: neutral | RSI: 42 | MACD: Bullish Cross ↑ | 24h: 2.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:39:53"
+    },
+    {
+      "role": "user",
+      "content": "find rwa",
+      "time": "21:40:08"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 3 opportunities\n\n🔴 #1 MKR\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $1800.00 | Trend: bullish | RSI: 69 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #2 ONDO\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $1.20 | Trend: bullish | RSI: 59 | MACD: Neutral | 24h: -5.00%\n🔴 #3 CFG\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $0.35 | Trend: bullish | RSI: 53 | MACD: Neutral | 24h: -4.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:40:12"
+    },
+    {
+      "role": "user",
+      "content": "gaming",
+      "time": "21:40:48"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 3 opportunities\n\n🔴 #1 SAND\n   Confidence: 40/100 — NO_TRADE\n   Sentiment:+0  Tech:+30  Volume:+10  News:+0  Macro:+0\n   Price: $0.42 | Trend: bullish | RSI: 69 | MACD: Bullish Cross ↑ | 24h: 3.00%\n🔴 #2 IMX\n   Confidence: 30/100 — NO_TRADE\n   Sentiment:+0  Tech:+20  Volume:+10  News:+0  Macro:+0\n   Price: $1.80 | Trend: bullish | RSI: 53 | MACD: Neutral | 24h: -4.00%\n🔴 #3 GALA\n   Confidence: 25/100 — NO_TRADE\n   Sentiment:+0  Tech:+15  Volume:+10  News:+0  Macro:+0\n   Price: $0.04 | Trend: neutral | RSI: 72 | MACD: Neutral | 24h: -3.00%\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:40:51"
+    },
+    {
+      "role": "user",
+      "content": "find ai trades",
+      "time": "21:45:59"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 5 opportunities\n\n🔴 NO_TRADE #1 FET — NO_TRADE\n   Price: $1.82 | Trend: bullish | RSI: 38 | MACD: Bullish Cross ↑ | 24h: 3.80%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   FET is trading in a bullish with upward momentum trend with positive 24h momentum (3.80%). RSI at 38 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #2 TAO — NO_TRADE\n   Price: $420.00 | Trend: bullish | RSI: 43 | MACD: Bullish Cross ↑ | 24h: 5.20%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   TAO is trading in a bullish with upward momentum trend with positive 24h momentum (5.20%). RSI at 43 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #3 RNDR — NO_TRADE\n   Price: $9.50 | Trend: bullish | RSI: 35 | MACD: Bullish Cross ↑ | 24h: 4.50%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   RNDR is trading in a bullish with upward momentum trend with positive 24h momentum (4.50%). RSI at 35 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #4 NEAR — NO_TRADE\n   Price: $5.80 | Trend: bullish | RSI: 49 | MACD: Bullish Cross ↑ | 24h: 3.00%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   NEAR is trading in a bullish with upward momentum trend with positive 24h momentum (3.00%). RSI at 49 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #5 AGIX — NO_TRADE\n   Price: $0.8500 | Trend: neutral | RSI: 62 | MACD: Bullish Cross ↑ | 24h: 6.00%\n   Confidence: 35/100  (Senti:+0  Tech:+25  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   AGIX is trading in a neutral, consolidating trend with positive 24h momentum (6.00%). RSI at 62 shows moderate bullish momentum with room for further upside. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 35/100 is driven by technical signals (+25), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:46:05"
+    },
+    {
+      "role": "user",
+      "content": "find meme coins",
+      "time": "21:46:06"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 4 opportunities\n\n🔴 NO_TRADE #1 SHIB — NO_TRADE\n   Price: $0.00002500 | Trend: bullish | RSI: 39 | MACD: Bullish Cross ↑ | 24h: 3.00%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   SHIB is trading in a bullish with upward momentum trend with positive 24h momentum (3.00%). RSI at 39 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #2 PEPE — NO_TRADE\n   Price: $0.00001200 | Trend: bullish | RSI: 43 | MACD: Neutral | 24h: -4.00%\n   Confidence: 30/100  (Senti:+0  Tech:+20  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   PEPE is trading in a bullish with upward momentum trend with negative 24h pressure (-4.00%). RSI at 43 is in neutral territory, allowing for either direction.\n\n   🤖 AI Reasoning:\n   Confidence score of 30/100 is driven by technical signals (+20), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #3 WIF — NO_TRADE\n   Price: $2.45 | Trend: bullish | RSI: 45 | MACD: Bullish Cross ↑ | 24h: 5.00%\n   Confidence: 30/100  (Senti:+0  Tech:+30  Vol:+0  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   WIF is trading in a bullish with upward momentum trend with positive 24h momentum (5.00%). RSI at 45 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 30/100 is driven by technical signals (+30). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #4 DOGE — NO_TRADE\n   Price: $0.1400 | Trend: neutral | RSI: 42 | MACD: Bullish Cross ↑ | 24h: 2.00%\n   Confidence: 25/100  (Senti:+0  Tech:+15  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   DOGE is trading in a neutral, consolidating trend with positive 24h momentum (2.00%). RSI at 42 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 25/100 is driven by technical signals (+15), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:46:10"
+    },
+    {
+      "role": "user",
+      "content": "find rwa coins",
+      "time": "21:46:18"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 3 opportunities\n\n🔴 NO_TRADE #1 MKR — NO_TRADE\n   Price: $1800.00 | Trend: bullish | RSI: 69 | MACD: Bullish Cross ↑ | 24h: 3.00%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   MKR is trading in a bullish with upward momentum trend with positive 24h momentum (3.00%). RSI at 69 shows moderate bullish momentum with room for further upside. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #2 ONDO — NO_TRADE\n   Price: $1.20 | Trend: bullish | RSI: 59 | MACD: Neutral | 24h: -5.00%\n   Confidence: 30/100  (Senti:+0  Tech:+20  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   ONDO is trading in a bullish with upward momentum trend with negative 24h pressure (-5.00%). RSI at 59 shows moderate bullish momentum with room for further upside.\n\n   🤖 AI Reasoning:\n   Confidence score of 30/100 is driven by technical signals (+20), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #3 CFG — NO_TRADE\n   Price: $0.3500 | Trend: bullish | RSI: 53 | MACD: Neutral | 24h: -4.00%\n   Confidence: 30/100  (Senti:+0  Tech:+20  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   CFG is trading in a bullish with upward momentum trend with negative 24h pressure (-4.00%). RSI at 53 is in neutral territory, allowing for either direction.\n\n   🤖 AI Reasoning:\n   Confidence score of 30/100 is driven by technical signals (+20), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:46:21"
+    },
+    {
+      "role": "user",
+      "content": "find ai trades",
+      "time": "21:46:40"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 5 opportunities\n\n🔴 NO_TRADE #1 FET — NO_TRADE\n   Price: $1.82 | Trend: bullish | RSI: 38 | MACD: Bullish Cross ↑ | 24h: 3.80%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   FET is in a bullish trend with positive 24h momentum (3.80%). RSI at 38 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #2 TAO — NO_TRADE\n   Price: $420.00 | Trend: bullish | RSI: 43 | MACD: Bullish Cross ↑ | 24h: 5.20%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   TAO is in a bullish trend with positive 24h momentum (5.20%). RSI at 43 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #3 RNDR — NO_TRADE\n   Price: $9.50 | Trend: bullish | RSI: 35 | MACD: Bullish Cross ↑ | 24h: 4.50%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   RNDR is in a bullish trend with positive 24h momentum (4.50%). RSI at 35 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #4 NEAR — NO_TRADE\n   Price: $5.80 | Trend: bullish | RSI: 49 | MACD: Bullish Cross ↑ | 24h: 3.00%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   NEAR is in a bullish trend with positive 24h momentum (3.00%). RSI at 49 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #5 AGIX — NO_TRADE\n   Price: $0.8500 | Trend: neutral | RSI: 62 | MACD: Bullish Cross ↑ | 24h: 6.00%\n   Confidence: 35/100  (Senti:+0  Tech:+25  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   AGIX is in a neutral trend with positive 24h momentum (6.00%). RSI at 62 shows moderate bullish momentum with room for further upside. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 35/100 is driven by technical signals (+25), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:46:46"
+    },
+    {
+      "role": "user",
+      "content": "find ai trades",
+      "time": "21:56:45"
+    },
+    {
+      "role": "assistant",
+      "content": "📊 Analyzed 5 opportunities\n\n🔴 NO_TRADE #1 FET — NO_TRADE\n   Price: $1.82 | Trend: bullish | RSI: 38 | MACD: Bullish Cross ↑ | 24h: 3.80%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   FET is in a bullish trend with positive 24h momentum (3.80%). RSI at 38 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #2 TAO — NO_TRADE\n   Price: $420.00 | Trend: bullish | RSI: 43 | MACD: Bullish Cross ↑ | 24h: 5.20%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   TAO is in a bullish trend with positive 24h momentum (5.20%). RSI at 43 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #3 RNDR — NO_TRADE\n   Price: $9.50 | Trend: bullish | RSI: 35 | MACD: Bullish Cross ↑ | 24h: 4.50%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   RNDR is in a bullish trend with positive 24h momentum (4.50%). RSI at 35 indicates the asset may be oversold — watch for reversal signals. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #4 NEAR — NO_TRADE\n   Price: $5.80 | Trend: bullish | RSI: 49 | MACD: Bullish Cross ↑ | 24h: 3.00%\n   Confidence: 40/100  (Senti:+0  Tech:+30  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   NEAR is in a bullish trend with positive 24h momentum (3.00%). RSI at 49 is in neutral territory, allowing for either direction. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 40/100 is driven by technical signals (+30), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n──────────────────────────────────────────────────\n🔴 NO_TRADE #5 AGIX — NO_TRADE\n   Price: $0.8500 | Trend: neutral | RSI: 62 | MACD: Bullish Cross ↑ | 24h: 6.00%\n   Confidence: 35/100  (Senti:+0  Tech:+25  Vol:+10  News:+0  Macro:+0)\n\n   📈 Market Outlook:\n   AGIX is in a neutral trend with positive 24h momentum (6.00%). RSI at 62 shows moderate bullish momentum with room for further upside. MACD shows a bullish cross, confirming short-term momentum alignment.\n\n   🤖 AI Reasoning:\n   Confidence score of 35/100 is driven by technical signals (+25), volume activity (+10). Signal strength is insufficient for a confident entry. Prioritize capital preservation until conditions improve.\n\n💡 Type \"buy \u003ccoin\u003e\" to go long or \"short \u003ccoin\u003e\" to go short (e.g. \"buy SOL\")",
+      "time": "21:56:50"
+    },
+    {
+      "role": "user",
+      "content": "buy SOL",
+      "time": "09:43:06"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $148.00\nPosition: 0.1324 SOL ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n⚠️  Warnings:\n  - Confidence is moderate (50/100) — WATCHLIST\n\nProceed anyway? Say \"confirm buy SOL\"\n",
+      "time": "09:43:07"
+    },
+    {
+      "role": "user",
+      "content": "confirm buy SOL",
+      "time": "09:43:24"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $148.00\nPosition: 0.1324 SOL ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n✅ Order placed!\nSOL Trend: bullish\nRSI: 73\nVolume: $1200000000\n\nMonitoring. Auto TP at +5%, SL at -2%.",
+      "time": "09:43:25"
+    },
+    {
+      "role": "user",
+      "content": "buy FET",
+      "time": "09:47:30"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying FET\nPrice: $1.82\nPosition: 10.5538 FET ($19.21)\nRisk: $19.21 (2% of $960 capital)\n\n⚠️  Warnings:\n  - Confidence is low (40/100)\n\nProceed anyway? Say \"confirm buy FET\"\n",
+      "time": "09:47:32"
+    }
+  ],
+  "trades": [
+    {
+      "id": "20260622213830",
+      "symbol": "TAOUSDT",
+      "side": "short",
+      "size": 0.047619047619047616,
+      "price": 420,
+      "pnl": -9.00952380952381,
+      "status": "CLOSED",
+      "created_at": "2026-06-22T21:38:30.570746+01:00"
+    },
+    {
+      "id": "20260624094325",
+      "symbol": "SOLUSDT",
+      "side": "buy",
+      "size": 0.13243243243243244,
+      "price": 148,
+      "pnl": 0,
+      "status": "OPEN",
+      "created_at": "2026-06-24T09:43:25.590054+01:00"
+    }
+  ],
+  "decision_log": [
+    {
+      "time": "2026-06-22T21:38:22.685479+01:00",
+      "symbol": "FET",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:38:23.687126+01:00",
+      "symbol": "TAO",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:38:24.688684+01:00",
+      "symbol": "RNDR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:38:25.690291+01:00",
+      "symbol": "AGIX",
+      "total": 35,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 25,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:38:26.69193+01:00",
+      "symbol": "NEAR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:39:50.641307+01:00",
+      "symbol": "DOGE",
+      "total": 25,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 15,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:39:51.644303+01:00",
+      "symbol": "SHIB",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:39:52.647398+01:00",
+      "symbol": "PEPE",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:39:53.65079+01:00",
+      "symbol": "WIF",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 0,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:40:10.098847+01:00",
+      "symbol": "ONDO",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:40:11.101302+01:00",
+      "symbol": "MKR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:40:12.103503+01:00",
+      "symbol": "CFG",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:40:49.660472+01:00",
+      "symbol": "IMX",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:40:50.66273+01:00",
+      "symbol": "SAND",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:40:51.665639+01:00",
+      "symbol": "GALA",
+      "total": 25,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 15,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:01.950382+01:00",
+      "symbol": "FET",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:02.954454+01:00",
+      "symbol": "TAO",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:03.960034+01:00",
+      "symbol": "RNDR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:04.964632+01:00",
+      "symbol": "AGIX",
+      "total": 35,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 25,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:05.967672+01:00",
+      "symbol": "NEAR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:07.357388+01:00",
+      "symbol": "DOGE",
+      "total": 25,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 15,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:08.360885+01:00",
+      "symbol": "SHIB",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:09.364198+01:00",
+      "symbol": "PEPE",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:10.36754+01:00",
+      "symbol": "WIF",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 0,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:19.360111+01:00",
+      "symbol": "ONDO",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:20.362782+01:00",
+      "symbol": "MKR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:21.365899+01:00",
+      "symbol": "CFG",
+      "total": 30,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 20,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:42.452257+01:00",
+      "symbol": "FET",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:43.454603+01:00",
+      "symbol": "TAO",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:44.456863+01:00",
+      "symbol": "RNDR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:45.460368+01:00",
+      "symbol": "AGIX",
+      "total": 35,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 25,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:46:46.462651+01:00",
+      "symbol": "NEAR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:56:46.611087+01:00",
+      "symbol": "FET",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:56:47.613114+01:00",
+      "symbol": "TAO",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:56:48.614872+01:00",
+      "symbol": "RNDR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:56:49.616633+01:00",
+      "symbol": "AGIX",
+      "total": 35,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 25,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    },
+    {
+      "time": "2026-06-22T21:56:50.618384+01:00",
+      "symbol": "NEAR",
+      "total": 40,
+      "decision": "NO_TRADE",
+      "sentiment": 0,
+      "technical": 30,
+      "volume": 10,
+      "news": 0,
+      "macro": 0
+    }
+  ]
+}
