@@ -956,14 +956,6 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 		return
 	}
 
-	// Block trades with confidence < 50 regardless of confirmation
-	if confidence.Decision == "NO_TRADE" {
-		msg := fmt.Sprintf("Cannot trade %s — market conditions are weak (confidence %.0f/100). Try a different coin.", want, confidence.Total)
-		h.store.AddChatMessage("assistant", msg)
-		c.JSON(http.StatusOK, gin.H{"type": "error", "explain": msg})
-		return
-	}
-
 	// Execute
 	if h.tradeMode == "demo" {
 		if balance < riskValue {

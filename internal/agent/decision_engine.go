@@ -49,9 +49,9 @@ func (d *DecisionEngine) EvaluateWithConfidence(market *models.MarketPerception)
 	}
 
 	decision := "NO_TRADE"
-	if total >= 70 {
+	if total >= 50 {
 		decision = "BUY"
-	} else if total >= 50 {
+	} else if total >= 30 {
 		decision = "WATCHLIST"
 	}
 

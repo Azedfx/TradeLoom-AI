@@ -338,7 +338,7 @@ body{
   border:1px solid var(--border);
   border-radius:var(--radius-md);
   display:flex;flex-direction:column;
-  height:180px;min-height:140px;
+  height:240px;min-height:180px;
 }
 .chat-header{
   display:flex;align-items:center;justify-content:space-between;
@@ -529,6 +529,21 @@ body{
     </div>
   </div>
 
+  <!-- Chat -->
+  <div class="chat-section">
+    <div class="chat-header">
+      <div class="chat-title"><span class="dot"></span> Console</div>
+      <button class="chat-clear" onclick="clearChat()">Clear</button>
+    </div>
+    <div class="chat-body">
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <div class="chat-input-wrap">
+        <input type="text" id="msg-input" placeholder="Search coins, buy, short..." autofocus onkeydown="if(event.key==='Enter')sendMsg()">
+        <button id="msg-btn" onclick="sendMsg()">Send</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Opportunities -->
   <div class="opp-section hidden" id="opp-section">
     <div class="section-header">
@@ -577,21 +592,6 @@ body{
       <div id="trade-area"></div>
       <div class="panel-hdr" style="margin-bottom:6px;margin-top:8px;font-size:8px;color:var(--text-muted)">🕐 Decisions</div>
       <div class="panel-body" id="decision-area"></div>
-    </div>
-  </div>
-
-  <!-- Chat -->
-  <div class="chat-section">
-    <div class="chat-header">
-      <div class="chat-title"><span class="dot"></span> Console</div>
-      <button class="chat-clear" onclick="clearChat()">Clear</button>
-    </div>
-    <div class="chat-body">
-      <div class="chat-msgs" id="chat-msgs"></div>
-      <div class="chat-input-wrap">
-        <input type="text" id="msg-input" placeholder="Search coins, buy, short..." autofocus onkeydown="if(event.key==='Enter')sendMsg()">
-        <button id="msg-btn" onclick="sendMsg()">Send</button>
-      </div>
     </div>
   </div>
 
