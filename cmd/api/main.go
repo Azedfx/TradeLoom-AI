@@ -51,15 +51,16 @@ func main() {
 		cfg.DefaultCapital, cfg.MaxRiskPercent, cfg.TakeProfitPct, cfg.StopLossPct,
 	)
 
+	port := cfg.Port
+	if port[0] != ':' {
+		port = ":" + port
+	}
+
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*.html")
 	api.RegisterRoutes(r, handler)
 
-	r.GET("/", func(c *gin.Context) {
-		c.HTML(200, "dashboard.html", nil)
-	})
-
-	log.Printf("server starting on %s (%s mode)", cfg.Port, cfg.TradeMode)
-	log.Printf("dashboard → http://localhost%s", cfg.Port)
-	r.Run(cfg.Port)
+	log.Printf("server starting on %s (%s mode)", port, cfg.TradeMode)
+	log.Printf("dashboard → http://localhost%s", port)
+	r.Run(port)
 }

@@ -322,6 +322,13 @@ func (h *StrategyHandler) GetStrategyStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, strategy)
 }
 
+func isJSONRequest(c *gin.Context) bool {
+	if strings.Contains(c.GetHeader("Accept"), "application/json") {
+		return true
+	}
+	return c.GetHeader("X-Requested-With") == "XMLHttpRequest"
+}
+
 func (h *StrategyHandler) Dashboard(c *gin.Context) {
 	strategies := h.store.GetAllStrategies()
 	trades := h.store.GetAllTrades()
@@ -346,28 +353,33 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"strategies":      strategies,
-		"trades":          trades,
-		"decisions":       decisions,
-		"totalPnL":        h.store.CalculatePnL(),
-		"totalProfit":     totalProfit,
-		"totalLoss":       totalLoss,
-		"winRate":         h.store.CalculateWinRate(),
-		"mode":            h.tradeMode,
-		"conversation":    h.store.GetConversation(),
-		"opportunities":   opps,
-		"lastPrompt":      lastPrompt,
-		"account_balance": h.store.AccountBalance,
-		"data_source":     dataSource,
-		"demo_fields":     demoFields,
-		"risk_policy": gin.H{
-			"default_capital":   h.defaultCapital,
-			"max_risk_percent": h.maxRiskPercent,
-			"take_profit_pct":  h.takeProfitPct,
-			"stop_loss_pct":    h.stopLossPct,
-		},
-	})
+	if isJSONRequest(c) {
+		c.JSON(http.StatusOK, gin.H{
+			"strategies":      strategies,
+			"trades":          trades,
+			"decisions":       decisions,
+			"totalPnL":        h.store.CalculatePnL(),
+			"totalProfit":     totalProfit,
+			"totalLoss":       totalLoss,
+			"winRate":         h.store.CalculateWinRate(),
+			"mode":            h.tradeMode,
+			"conversation":    h.store.GetConversation(),
+			"opportunities":   opps,
+			"lastPrompt":      lastPrompt,
+			"account_balance": h.store.AccountBalance,
+			"data_source":     dataSource,
+			"demo_fields":     demoFields,
+			"risk_policy": gin.H{
+				"default_capital":   h.defaultCapital,
+				"max_risk_percent": h.maxRiskPercent,
+				"take_profit_pct":  h.takeProfitPct,
+				"stop_loss_pct":    h.stopLossPct,
+			},
+		})
+		return
+	}
+
+	c.HTML(http.StatusOK, "dashboard.html", nil)
 }
 
 func (h *StrategyHandler) ListTrades(c *gin.Context) {

@@ -734,7 +734,7 @@ async function sendMsg(){
   ld.innerHTML='<span style="display:inline-flex;gap:3px"><span style="animation:dotPulse 1.2s infinite">⏳</span></span>';
   chatMsgs.appendChild(ld);scrollChat();
   try{
-    const r=await fetch('/api/v1/quick-execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:t})});
+    const r=await fetch('/quick-execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:t})});
     const d=await r.json();
     document.getElementById(lid)?.remove();
     if(d.explain)addChat('bot',d.explain);
@@ -771,7 +771,7 @@ function clearChat(){
 // ─── DASHBOARD REFRESH ───
 async function refresh(){
   try{
-    const r=await fetch('/api/v1/dashboard');
+    const r=await fetch('/',{headers:{'X-Requested-With':'XMLHttpRequest'}});
     const d=await r.json();
     const trades=d.trades||[];
     const pnl=d.totalPnL||0;
@@ -880,7 +880,7 @@ async function refresh(){
 // ─── NEWS ───
 async function loadNews(){
   try{
-    const r=await fetch('/api/v1/news');
+    const r=await fetch('/news');
     const d=await r.json();
     const items=d.news||[];
     const el=document.getElementById('news-area');
@@ -894,7 +894,7 @@ async function loadNews(){
 // ─── F&G ───
 async function loadFG(){
   try{
-    const r=await fetch('/api/v1/fear-greed');
+    const r=await fetch('/fear-greed');
     const d=await r.json();
     const sc=parseInt(d.fear_greed)||parseInt(d.score)||0;
     const lb=d.label||d.sentiment||'N/A';
@@ -907,7 +907,7 @@ async function loadFG(){
 // ─── BRIEF ───
 async function loadBrief(){
   try{
-    const r=await fetch('/api/v1/brief');
+    const r=await fetch('/brief');
     const d=await r.json();
     if(d.error)return;
     const mood=d.market_mood||'Neutral';
@@ -923,7 +923,7 @@ async function loadBrief(){
 // ─── TRENDING ───
 async function loadTrending(){
   try{
-    const r=await fetch('/api/v1/trending');
+    const r=await fetch('/trending');
     const d=await r.json();
     const coins=d.trending||[];
     const el=document.getElementById('trending-coins');
