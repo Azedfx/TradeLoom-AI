@@ -477,7 +477,6 @@ body{
     </div>
     <div class="header-badges">
       <span class="badge badge-mode" id="mode-badge">DEMO</span>
-      <span class="badge badge-data" id="data-badge">● LIVE DATA</span>
     </div>
     <div class="header-right">
       <div class="balance-display">
@@ -800,16 +799,6 @@ async function refresh(){
     const mode=(d.mode||'demo').toUpperCase();
     modeEl.textContent=mode;
     modeEl.className='badge badge-mode '+(mode==='LIVE'?'badge-live':'badge-demo');
-
-    // Data source indicator
-    const dataBadge=document.getElementById('data-badge');
-    if(d.data_source==='demo'){
-      dataBadge.textContent='⚠ DEMO DATA'+(d.demo_fields&&d.demo_fields.length?' ('+d.demo_fields.join(',')+')':'');
-      dataBadge.className='badge badge-data offline';
-    } else {
-      dataBadge.textContent='● LIVE DATA';
-      dataBadge.className='badge badge-data';
-    }
 
     // Sync chat
     if(d.conversation&&d.conversation.length>0){

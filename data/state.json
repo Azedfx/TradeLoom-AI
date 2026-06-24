@@ -82,7 +82,7 @@
     }
   ],
   "last_prompt": "find ai trades",
-  "account_balance": 960.4,
+  "account_balance": 979.8939363579688,
   "conversation": [
     {
       "role": "user",
@@ -252,8 +252,8 @@
       "side": "buy",
       "size": 0.13243243243243244,
       "price": 148,
-      "pnl": 0,
-      "status": "OPEN",
+      "pnl": -0.1060636420312033,
+      "status": "CLOSED",
       "created_at": "2026-06-24T09:43:25.590054+01:00"
     }
   ],
