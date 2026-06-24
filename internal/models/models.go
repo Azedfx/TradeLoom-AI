@@ -82,6 +82,29 @@ type DecisionRecord struct {
 type ConfidenceScore struct {
 	Total     float64       `json:"total"`
 	Signals   []SignalScore `json:"signals"`
-	Decision  string        `json:"decision"` // "BUY", "WATCHLIST", "NO_TRADE"
+	Decision  string        `json:"decision"`
 	Reasoning string        `json:"reasoning"`
+}
+
+type Opportunity struct {
+	Symbol         string  `json:"symbol"`
+	Decision       string  `json:"decision"`
+	Confidence     float64 `json:"confidence"`
+	SentimentScore float64 `json:"sentiment_score"`
+	TechScore      float64 `json:"tech_score"`
+	VolumeScore    float64 `json:"volume_score"`
+	NewsScore      float64 `json:"news_score"`
+	MacroScore     float64 `json:"macro_score"`
+	Reasoning      string  `json:"reasoning"`
+	Price          float64 `json:"price"`
+	Trend          string  `json:"trend"`
+	RSI            float64 `json:"rsi"`
+	MACD           string  `json:"macd"`
+	Change24h      string  `json:"change24h"`
+}
+
+type ChatMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+	Time    string `json:"time"`
 }

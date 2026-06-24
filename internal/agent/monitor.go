@@ -3,6 +3,7 @@ package agent
 import (
 	"fmt"
 	"log"
+	"math"
 	"time"
 
 	"trade/internal/bitget"
@@ -19,9 +20,30 @@ type Monitor struct {
 	mcpClient      *bitget.MCPClient
 	intentParser   *llm.LLMClient
 	interval       time.Duration
+	defaultCapital float64
+	maxRiskPercent float64
+	takeProfitPct  float64
+	stopLossPct    float64
+	tradeMode      string
+	lastPnlLog     map[string]float64
 }
 
-func NewMonitor(s *store.MemoryStore, md *bitget.MarketData, de *DecisionEngine, te *bitget.TradeExecutor, mcp *bitget.MCPClient, lp *llm.LLMClient) *Monitor {
+func NewMonitor(s *store.MemoryStore, md *bitget.MarketData, de *DecisionEngine, te *bitget.TradeExecutor, mcp *bitget.MCPClient, lp *llm.LLMClient, interval time.Duration, defaultCapital, maxRiskPercent, takeProfitPct, stopLossPct float64, tradeMode string) *Monitor {
+	if interval <= 0 {
+		interval = 10 * time.Second
+	}
+	if defaultCapital <= 0 {
+		defaultCapital = 1000
+	}
+	if maxRiskPercent <= 0 {
+		maxRiskPercent = 2
+	}
+	if takeProfitPct <= 0 {
+		takeProfitPct = 5
+	}
+	if stopLossPct <= 0 {
+		stopLossPct = 2
+	}
 	return &Monitor{
 		store:          s,
 		marketData:     md,
@@ -29,7 +51,13 @@ func NewMonitor(s *store.MemoryStore, md *bitget.MarketData, de *DecisionEngine,
 		executor:       te,
 		mcpClient:      mcp,
 		intentParser:   lp,
-		interval:       10 * time.Second,
+		interval:       interval,
+		defaultCapital: defaultCapital,
+		maxRiskPercent: maxRiskPercent,
+		takeProfitPct:  takeProfitPct,
+		stopLossPct:    stopLossPct,
+		tradeMode:      tradeMode,
+		lastPnlLog:     make(map[string]float64),
 	}
 }
 
@@ -98,17 +126,20 @@ func (m *Monitor) evaluateEntry(s *models.Strategy) {
 	m.store.LogDecision(symbol, confidence.Total, confidence.Decision, confidence.Signals)
 
 	if confidence.Decision == "BUY" {
-		log.Printf("[MONITOR] 🔥 BUY SIGNAL for %s! Confidence: %.0f/100. Executing...", symbol, confidence.Total)
+		log.Printf("[MONITOR] BUY SIGNAL for %s! Confidence: %.0f/100.", symbol, confidence.Total)
 
-		// Risk sizing
 		capital, _ := m.executor.GetBalance("USDT")
 		if capital == 0 {
-			capital = 1000
+			capital = m.store.AccountBalance
 		}
-		size := (capital * 0.02) / tech.LastPrice
+		maxRisk := capital * (m.maxRiskPercent / 100)
+		size := maxRisk / tech.LastPrice
 
-		m.executor.PlaceOrder(symbol, "buy", "market", size, 0)
+		if m.tradeMode != "demo" {
+			m.executor.PlaceOrder(symbol, "buy", "market", size, 0)
+		}
 		m.store.LogTrade(symbol, "buy", size, tech.LastPrice, 0, "OPEN")
+		m.store.AccountBalance -= maxRisk
 
 		s.Entered = true
 		m.store.SaveStrategy(s)
@@ -129,37 +160,64 @@ func (m *Monitor) CheckPositions() {
 }
 
 func (m *Monitor) evaluateExit(t models.Trade) {
-	// Fetch current technicals
 	tech, err := m.marketData.GetTechnicalIndicators(t.Symbol)
 	if err != nil {
 		return
 	}
 
-	// 1. Exit if PnL is > 5% (Take Profit) or < -2% (Stop Loss)
-	pnlPct := (tech.LastPrice - t.Price) / t.Price
+	isShort := t.Side == "short" || t.Side == "sell"
+	var pnlPct float64
+	if isShort {
+		pnlPct = (t.Price - tech.LastPrice) / t.Price
+	} else {
+		pnlPct = (tech.LastPrice - t.Price) / t.Price
+	}
 
 	shouldExit := false
 	reason := ""
 
-	if tech.Trend == "bearish" {
+	trendWarn := ""
+	if isShort {
+		trendWarn = "bullish"
+	} else {
+		trendWarn = "bearish"
+	}
+
+	if tech.Trend == trendWarn {
 		shouldExit = true
-		reason = "Trend turned bearish"
-	} else if tech.RSI14 > 80 {
+		reason = fmt.Sprintf("Trend turned %s", trendWarn)
+	} else if !isShort && tech.RSI14 > 80 {
 		shouldExit = true
 		reason = "RSI overbought (80+)"
-	} else if pnlPct > 0.05 {
+	} else if isShort && tech.RSI14 < 20 {
 		shouldExit = true
-		reason = "Take Profit target reached (+5%)"
-	} else if pnlPct < -0.02 {
+		reason = "RSI oversold (20-)"
+	} else if pnlPct > (m.takeProfitPct / 100) {
 		shouldExit = true
-		reason = "Stop Loss target reached (-2%)"
+		reason = fmt.Sprintf("Take profit target reached (+%.2f%%)", m.takeProfitPct)
+	} else if pnlPct < -(m.stopLossPct / 100) {
+		shouldExit = true
+		reason = fmt.Sprintf("Stop loss target reached (-%.2f%%)", m.stopLossPct)
 	}
 
 	if shouldExit {
-		log.Printf("[MONITOR] 🛑 EXIT SIGNAL for %s: %s (PnL: %.2f%%). Closing position...", t.Symbol, reason, pnlPct*100)
-		m.executor.PlaceOrder(t.Symbol, "sell", "market", t.Size, 0)
-		m.store.CloseTrade(t.ID, tech.LastPrice, pnlPct*(t.Size*t.Price))
+		log.Printf("[MONITOR] EXIT %s: %s | PnL: %.2f%%", t.Symbol, reason, pnlPct*100)
+		delete(m.lastPnlLog, t.Symbol)
+		exitSide := "sell"
+		if isShort {
+			exitSide = "buy"
+		}
+		if m.tradeMode != "demo" {
+			m.executor.PlaceOrder(t.Symbol, exitSide, "market", t.Size, 0)
+		}
+		realizedPnl := pnlPct * (t.Size * t.Price)
+		m.store.CloseTrade(t.ID, tech.LastPrice, realizedPnl)
 	} else {
-		log.Printf("[MONITOR] 🔎 Monitoring %s position. Current PnL: %.2f%%. Holding...", t.Symbol, pnlPct*100)
+		last, seen := m.lastPnlLog[t.Symbol]
+		pnlRounded := math.Round(pnlPct*100) / 100
+		if !seen || math.Abs(pnlRounded-last) > 0.5 {
+			m.lastPnlLog[t.Symbol] = pnlRounded
+			log.Printf("[MONITOR] %s PnL: %+.2f%%", t.Symbol, pnlPct*100)
+		}
 	}
 }

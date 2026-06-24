@@ -13,5 +13,6 @@ func RegisterRoutes(r *gin.Engine, h *StrategyHandler) {
 	api.GET("/trending", h.TrendingCoins)
 	api.GET("/fear-greed", h.FearGreedIndex)
 	api.GET("/brief", h.MarketBrief)
+	api.GET("/news", h.MarketNews)
 	api.POST("/quick-execute", h.QuickExecute)
 }

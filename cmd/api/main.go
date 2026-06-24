@@ -2,13 +2,13 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
 	"trade/config"
 	"trade/internal/agent"
 	"trade/internal/api"
-	"trade/internal/backtest"
 	"trade/internal/bitget"
 	"trade/internal/llm"
 	"trade/internal/store"
@@ -22,27 +22,33 @@ func main() {
 
 	llmClient := llm.NewLLMClient(cfg.LLMApiKey(), cfg.LLMBaseURL, cfg.LLMModel)
 	strategyCompiler := &agent.StrategyCompiler{}
-	marketData := &bitget.MarketData{}
+	marketData := bitget.NewMarketData()
 	decisionEngine := agent.NewDecisionEngine(marketData)
 	tradeExecutor := &bitget.TradeExecutor{}
 	mcpClient := bitget.NewMCPClient("https://hackathon.bitgetops.com/mcp")
-	memStore := store.NewMemoryStore("trade_log.csv")
+	memStore := store.NewMemoryStore("trade_log.csv", "data/state.json", cfg.DefaultCapital)
 
-	// Run backtest on startup
-	go func() {
-		log.Println("[BACKTEST] Running startup backtest on BTCUSDT...")
-		bt := backtest.New(marketData)
-		report := bt.Run("BTCUSDT", 90)
-		report.Save("backtest_report.txt")
-		log.Println("[BACKTEST] Report saved to backtest_report.txt")
-	}()
-
-	monitor := agent.NewMonitor(memStore, marketData, decisionEngine, tradeExecutor, mcpClient, llmClient)
+	monitor := agent.NewMonitor(
+		memStore,
+		marketData,
+		decisionEngine,
+		tradeExecutor,
+		mcpClient,
+		llmClient,
+		time.Duration(cfg.MonitorInterval)*time.Second,
+		cfg.DefaultCapital,
+		cfg.MaxRiskPercent,
+		cfg.TakeProfitPct,
+		cfg.StopLossPct,
+		cfg.TradeMode,
+	)
 	monitor.Start()
 
 	handler := api.NewStrategyHandler(
 		llmClient, strategyCompiler, decisionEngine,
-		tradeExecutor, mcpClient, memStore, cfg.TradeMode, cfg.DefaultSymbol,
+		tradeExecutor, mcpClient, marketData, memStore,
+		cfg.TradeMode, cfg.DefaultSymbol,
+		cfg.DefaultCapital, cfg.MaxRiskPercent, cfg.TakeProfitPct, cfg.StopLossPct,
 	)
 
 	r := gin.Default()

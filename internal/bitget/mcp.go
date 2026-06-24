@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"sort"
+	"strconv"
 	"time"
 )
 
@@ -14,8 +16,12 @@ type MCPClient struct {
 }
 
 func NewMCPClient(baseURL string) *MCPClient {
+	dialer := &net.Dialer{Timeout: 3 * time.Second}
 	return &MCPClient{
-		httpClient: &http.Client{Timeout: 10 * time.Second},
+		httpClient: &http.Client{
+			Timeout:   10 * time.Second,
+			Transport: &http.Transport{DialContext: dialer.DialContext},
+		},
 	}
 }
 
@@ -41,9 +47,11 @@ func (c *MCPClient) SentimentIndex(action string) (json.RawMessage, error) {
 		return nil, fmt.Errorf("no fng data")
 	}
 
+	fgi, _ := strconv.ParseFloat(result.Data[0].Value, 64)
 	output := map[string]interface{}{
-		"score":     result.Data[0].Value,
-		"sentiment": result.Data[0].Classification,
+		"score":      fgi / 100.0,
+		"fear_greed": fgi,
+		"label":      result.Data[0].Classification,
 	}
 	raw, _ := json.Marshal(output)
 	return raw, nil

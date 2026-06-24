@@ -387,9 +387,4 @@ func extractFloat(s, prefix string) float64 {
 	return val
 }
 
-func (d *DecisionEngine) shouldTrade(score *models.ConfidenceScore) (shouldEnter, shouldExit bool) {
-	if score.Decision == "BUY" {
-		return true, false
-	}
-	return false, false
-}
+

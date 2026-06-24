@@ -1,6 +1,7 @@
 package store
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"sync"
@@ -10,22 +11,45 @@ import (
 )
 
 type MemoryStore struct {
-	mu            sync.RWMutex
-	strategies    map[string]*models.Strategy
-	trades        []models.Trade
-	decisionLog   []models.DecisionRecord
-	logFile       *os.File
+	mu                sync.RWMutex
+	strategies        map[string]*models.Strategy
+	trades            []models.Trade
+	decisionLog       []models.DecisionRecord
+	logFile           *os.File
+	LastOpportunities []models.Opportunity `json:"last_opportunities"`
+	LastPrompt        string               `json:"last_prompt"`
+	AccountBalance    float64              `json:"account_balance"`
+	Conversation      []models.ChatMessage `json:"conversation"`
+	statePath         string
 }
 
-func NewMemoryStore(logPath string) *MemoryStore {
+type storeSnapshot struct {
+	LastOpportunities []models.Opportunity `json:"last_opportunities"`
+	LastPrompt        string               `json:"last_prompt"`
+	AccountBalance    float64              `json:"account_balance"`
+	Conversation      []models.ChatMessage `json:"conversation"`
+	Trades            []models.Trade       `json:"trades"`
+	DecisionLog       []models.DecisionRecord `json:"decision_log"`
+}
+
+func NewMemoryStore(logPath string, statePath string, defaultCapital float64) *MemoryStore {
+	if defaultCapital <= 0 {
+		defaultCapital = 1000
+	}
 	s := &MemoryStore{
-		strategies: make(map[string]*models.Strategy),
+		strategies:     make(map[string]*models.Strategy),
+		AccountBalance: defaultCapital,
+		statePath:      statePath,
+	}
+
+	// Load persisted state
+	if statePath != "" {
+		s.loadState()
 	}
 
 	f, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err == nil {
 		s.logFile = f
-		// Write header if file is empty
 		info, _ := f.Stat()
 		if info.Size() == 0 {
 			fmt.Fprintln(f, "timestamp,symbol,direction,price,quantity,pnl,status")
@@ -35,10 +59,60 @@ func NewMemoryStore(logPath string) *MemoryStore {
 	return s
 }
 
+func (s *MemoryStore) loadState() {
+	data, err := os.ReadFile(s.statePath)
+	if err != nil {
+		return // file doesn't exist yet
+	}
+	var snap storeSnapshot
+	if err := json.Unmarshal(data, &snap); err != nil {
+		return
+	}
+	s.LastOpportunities = snap.LastOpportunities
+	s.LastPrompt = snap.LastPrompt
+	if snap.AccountBalance > 0 {
+		s.AccountBalance = snap.AccountBalance
+	}
+	s.Conversation = snap.Conversation
+	s.trades = snap.Trades
+	s.decisionLog = snap.DecisionLog
+}
+
+func (s *MemoryStore) persist() {
+	if s.statePath == "" {
+		return
+	}
+	snap := storeSnapshot{
+		LastOpportunities: s.LastOpportunities,
+		LastPrompt:        s.LastPrompt,
+		AccountBalance:    s.AccountBalance,
+		Conversation:      s.Conversation,
+		Trades:            s.trades,
+		DecisionLog:       s.decisionLog,
+	}
+	data, err := json.MarshalIndent(snap, "", "  ")
+	if err != nil {
+		return
+	}
+	// Ensure directory exists
+	lastSlash := -1
+	for i := len(s.statePath) - 1; i >= 0; i-- {
+		if s.statePath[i] == '/' {
+			lastSlash = i
+			break
+		}
+	}
+	if lastSlash >= 0 {
+		os.MkdirAll(s.statePath[:lastSlash], 0755)
+	}
+	os.WriteFile(s.statePath, data, 0644)
+}
+
 func (s *MemoryStore) SaveStrategy(strategy *models.Strategy) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.strategies[strategy.ID] = strategy
+	s.persist()
 }
 
 func (s *MemoryStore) GetStrategy(id string) *models.Strategy {
@@ -61,6 +135,7 @@ func (s *MemoryStore) AddTrade(trade models.Trade) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.trades = append(s.trades, trade)
+	s.persist()
 }
 
 func (s *MemoryStore) GetOpenPositions() []models.Trade {
@@ -82,14 +157,18 @@ func (s *MemoryStore) CloseTrade(id string, exitPrice, pnl float64) {
 			s.trades[i].Status = "CLOSED"
 			s.trades[i].PnL = pnl
 			t := s.trades[i]
+			lockedCapital := t.Size * t.Price
+			s.AccountBalance += lockedCapital + pnl
 			s.mu.Unlock()
 
-			// Append close row to CSV
 			if s.logFile != nil {
 				fmt.Fprintf(s.logFile, "%s,%s,close,%.8f,%.8f,%.2f,%s\n",
 					time.Now().Format("2006-01-02 15:04:05"),
 					t.Symbol, exitPrice, t.Size, pnl, "CLOSED")
 			}
+			s.mu.Lock()
+			s.persist()
+			s.mu.Unlock()
 			return
 		}
 	}
@@ -176,6 +255,7 @@ func (s *MemoryStore) LogDecision(symbol string, total float64, decision string,
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.decisionLog = append(s.decisionLog, r)
+	s.persist()
 }
 
 func (s *MemoryStore) GetDecisionLog() []models.DecisionRecord {
@@ -183,5 +263,43 @@ func (s *MemoryStore) GetDecisionLog() []models.DecisionRecord {
 	defer s.mu.RUnlock()
 	result := make([]models.DecisionRecord, len(s.decisionLog))
 	copy(result, s.decisionLog)
+	return result
+}
+
+func (s *MemoryStore) SetLastOpportunities(opps []models.Opportunity, prompt string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.LastOpportunities = opps
+	s.LastPrompt = prompt
+	s.persist()
+}
+
+func (s *MemoryStore) GetLastOpportunities() ([]models.Opportunity, string) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	result := make([]models.Opportunity, len(s.LastOpportunities))
+	copy(result, s.LastOpportunities)
+	return result, s.LastPrompt
+}
+
+func (s *MemoryStore) AddChatMessage(role, content string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.Conversation = append(s.Conversation, models.ChatMessage{
+		Role:    role,
+		Content: content,
+		Time:    time.Now().Format("15:04:05"),
+	})
+	if len(s.Conversation) > 50 {
+		s.Conversation = s.Conversation[len(s.Conversation)-50:]
+	}
+	s.persist()
+}
+
+func (s *MemoryStore) GetConversation() []models.ChatMessage {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	result := make([]models.ChatMessage, len(s.Conversation))
+	copy(result, s.Conversation)
 	return result
 }

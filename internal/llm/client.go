@@ -12,38 +12,23 @@ import (
 )
 
 type LLMClient struct {
-	apiKey    string
-	baseURL   string
-	model     string
-	httpCli   *http.Client
-	briefModel string
+	apiKey  string
+	baseURL string
+	model   string
+	httpCli *http.Client
 }
 
 func NewLLMClient(apiKey, baseURL, model string) *LLMClient {
 	return &LLMClient{
-		apiKey:     apiKey,
-		baseURL:    baseURL,
-		model:      model,
-		httpCli:    &http.Client{Timeout: 60 * time.Second},
-		briefModel: "qwen3.6-flash",
+		apiKey:  apiKey,
+		baseURL: baseURL,
+		model:   model,
+		httpCli: &http.Client{Timeout: 60 * time.Second},
 	}
 }
 
 func (l *LLMClient) ParseIntent(userPrompt string) (*models.UserIntent, error) {
-	systemPrompt := `
-You are a trading strategy compiler. Convert natural language trading ideas into structured JSON.
-Be specific about assets.
-- If the user asks for "AI coins", pick one from [FET, TAO, RNDR, WLD].
-- If the user asks for "RWA", pick [ONDO].
-- If the user asks for "L1", pick [SOL, AVAX, NEAR].
-- If they ask for a specific coin, use that.
-
-Output format:
-{
-  "assets": ["TICKER"] (e.g., ["FET"] or ["ONDO"]),
-  "market_condition": "bullish" | "bearish" | "neutral" | null,
-...
-`
+	systemPrompt := `Map the user's trading request to JSON. AI→[FET,TAO,RNDR,WLD] L1→[SOL,AVAX,NEAR] RWA→[ONDO] DEFI→[UNI]. Output: {"assets":["TICKER"],"market_condition":"bullish|bearish|neutral","entry_signals":[],"exit_signals":[],"risk_profile":"low|medium|aggressive","max_risk_per_trade":2}. Only return valid JSON.`
 	reqBody := map[string]interface{}{
 		"model": l.model,
 		"messages": []map[string]string{
@@ -250,7 +235,7 @@ Return a JSON with these exact fields:
 Return ONLY valid JSON.`, trendingData, sentimentData, newsData, macroData)
 
 	reqBody := map[string]interface{}{
-		"model": l.briefModel,
+		"model": l.model,
 		"messages": []map[string]string{
 			{"role": "system", "content": "You are a chief crypto market strategist. Write concise, data-driven market briefs."},
 			{"role": "user", "content": prompt},
