@@ -599,23 +599,15 @@ func (h *StrategyHandler) QuickExecute(c *gin.Context) {
 
 	lower := strings.ToLower(strings.TrimSpace(req.Prompt))
 
-	// ─── CONFIRM BUY / SHORT ───
+	// ─── CONFIRM BUY ───
 	if strings.HasPrefix(lower, "confirm buy ") || strings.HasPrefix(lower, "confirm long ") {
 		h.handleTrade(req.Prompt, "buy", c)
 		return
 	}
-	if strings.HasPrefix(lower, "confirm short ") || strings.HasPrefix(lower, "confirm sell ") {
-		h.handleTrade(req.Prompt, "short", c)
-		return
-	}
 
-	// ─── BUY / SHORT FLOW ───
+	// ─── BUY FLOW ───
 	if strings.HasPrefix(lower, "buy ") || strings.HasPrefix(lower, "purchase ") || strings.HasPrefix(lower, "long ") {
 		h.handleTrade(req.Prompt, "buy", c)
-		return
-	}
-	if strings.HasPrefix(lower, "short ") || strings.HasPrefix(lower, "sell ") {
-		h.handleTrade(req.Prompt, "short", c)
 		return
 	}
 
@@ -780,7 +772,7 @@ func (h *StrategyHandler) QuickExecute(c *gin.Context) {
 			explain.WriteString(fmt.Sprintf("   %s\n", strings.Join(parts, " · ")))
 		}
 	}
-	explain.WriteString("\nSay \"buy <coin>\" or \"short <coin>\" to trade")
+	explain.WriteString("\nSay \"buy <coin>\" to trade")
 
 	h.store.AddChatMessage("assistant", explain.String())
 
@@ -890,11 +882,7 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 	}
 
 	var explain strings.Builder
-	if side == "short" {
-		explain.WriteString(fmt.Sprintf("🔻 Shorting %s\n", want))
-	} else {
-		explain.WriteString(fmt.Sprintf("💰 Buying %s\n", want))
-	}
+	explain.WriteString(fmt.Sprintf("💰 Buying %s\n", want))
 	explain.WriteString(fmt.Sprintf("Price: $%.2f\n", tech.LastPrice))
 	if positionSize > 0 {
 		explain.WriteString(fmt.Sprintf("Position: %.4f %s ($%.2f)\n", positionSize, want, riskValue))
@@ -903,21 +891,30 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 	}
 	explain.WriteString(fmt.Sprintf("Risk: $%.2f (2%% of $%.0f capital)\n", riskValue, balance))
 
+	// Enforce decision/confidence consistency (LLM sometimes returns mismatched pairs)
+	if confidence.Total >= 50 && confidence.Decision != "BUY" {
+		confidence.Decision = "BUY"
+	} else if confidence.Total < 30 && confidence.Decision != "NO_TRADE" {
+		confidence.Decision = "NO_TRADE"
+	} else if confidence.Total >= 30 && confidence.Total < 50 && confidence.Decision != "WATCHLIST" {
+		confidence.Decision = "WATCHLIST"
+	}
+
 	// Collect warnings from both decision engine and tech checks
 	var warnings []string
 	if confidence.Decision != "BUY" {
-		if confidence.Decision == "NO_TRADE" {
-			warnings = append(warnings, fmt.Sprintf("Confidence is low (%.0f/100)", confidence.Total))
-		} else {
+		if confidence.Total >= 50 {
+			warnings = append(warnings, fmt.Sprintf("Confidence is high (%.0f/100) — %s", confidence.Total, confidence.Decision))
+		} else if confidence.Total >= 30 {
 			warnings = append(warnings, fmt.Sprintf("Confidence is moderate (%.0f/100) — %s", confidence.Total, confidence.Decision))
+		} else {
+			warnings = append(warnings, fmt.Sprintf("Confidence is low (%.0f/100)", confidence.Total))
 		}
 	}
 	if side == "buy" && tech.Trend != "bullish" {
 		warnings = append(warnings, fmt.Sprintf("Trend is %s (not ideal for long)", tech.Trend))
 	}
-	if side == "short" && tech.Trend != "bearish" {
-		warnings = append(warnings, fmt.Sprintf("Trend is %s (not ideal for short)", tech.Trend))
-	}
+
 	if tech.RSI14 > 80 {
 		warnings = append(warnings, fmt.Sprintf("RSI is overbought (%.0f)", tech.RSI14))
 	} else if tech.RSI14 < 30 {
@@ -972,11 +969,7 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 	explain.WriteString(fmt.Sprintf("%s Trend: %s\n", want, tech.Trend))
 	explain.WriteString(fmt.Sprintf("RSI: %.0f\n", tech.RSI14))
 	explain.WriteString(fmt.Sprintf("Volume: $%.0f\n", tech.Volume))
-	if side == "buy" {
-		explain.WriteString(fmt.Sprintf("\nMonitoring. Auto TP at +5%%, SL at -2%%."))
-	} else {
-		explain.WriteString(fmt.Sprintf("\nMonitoring. Auto TP at -5%%, SL at +2%%."))
-	}
+	explain.WriteString(fmt.Sprintf("\nMonitoring. Auto TP at +5%%, SL at -2%%."))
 
 	h.store.AddChatMessage("assistant", explain.String())
 

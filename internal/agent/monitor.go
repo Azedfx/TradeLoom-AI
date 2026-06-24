@@ -165,34 +165,17 @@ func (m *Monitor) evaluateExit(t models.Trade) {
 		return
 	}
 
-	isShort := t.Side == "short" || t.Side == "sell"
-	var pnlPct float64
-	if isShort {
-		pnlPct = (t.Price - tech.LastPrice) / t.Price
-	} else {
-		pnlPct = (tech.LastPrice - t.Price) / t.Price
-	}
+	pnlPct := (tech.LastPrice - t.Price) / t.Price
 
 	shouldExit := false
 	reason := ""
 
-	trendWarn := ""
-	if isShort {
-		trendWarn = "bullish"
-	} else {
-		trendWarn = "bearish"
-	}
-
-	// In demo mode, skip trend-based exits (demo trend oscillates and causes premature closes)
-	if m.tradeMode != "demo" && tech.Trend == trendWarn {
+	if m.tradeMode != "demo" && tech.Trend == "bearish" {
 		shouldExit = true
-		reason = fmt.Sprintf("Trend turned %s", trendWarn)
-	} else if !isShort && tech.RSI14 > 80 {
+		reason = "Trend turned bearish"
+	} else if tech.RSI14 > 80 {
 		shouldExit = true
 		reason = "RSI overbought (80+)"
-	} else if isShort && tech.RSI14 < 20 {
-		shouldExit = true
-		reason = "RSI oversold (20-)"
 	} else if pnlPct > (m.takeProfitPct / 100) {
 		shouldExit = true
 		reason = fmt.Sprintf("Take profit target reached (+%.2f%%)", m.takeProfitPct)
@@ -204,12 +187,8 @@ func (m *Monitor) evaluateExit(t models.Trade) {
 	if shouldExit {
 		log.Printf("[MONITOR] EXIT %s: %s | PnL: %.2f%%", t.Symbol, reason, pnlPct*100)
 		delete(m.lastPnlLog, t.Symbol)
-		exitSide := "sell"
-		if isShort {
-			exitSide = "buy"
-		}
 		if m.tradeMode != "demo" {
-			m.executor.PlaceOrder(t.Symbol, exitSide, "market", t.Size, 0)
+			m.executor.PlaceOrder(t.Symbol, "sell", "market", t.Size, 0)
 		}
 		realizedPnl := pnlPct * (t.Size * t.Price)
 		m.store.CloseTrade(t.ID, tech.LastPrice, realizedPnl)

@@ -305,7 +305,7 @@ body{
   text-transform:uppercase;letter-spacing:0.3px;
 }
 .trade-side.long{background:var(--accent-green-glow);color:var(--accent-green)}
-.trade-side.short{background:var(--accent-red-glow);color:var(--accent-red)}
+
 .trade-sym{font-weight:600;font-family:'JetBrains Mono',monospace}
 .trade-price{font-family:'JetBrains Mono',monospace;color:var(--text-secondary);margin-left:auto}
 .trade-pnl{font-family:'JetBrains Mono',monospace;font-weight:600}
@@ -538,7 +538,7 @@ body{
     <div class="chat-body">
       <div class="chat-msgs" id="chat-msgs"></div>
       <div class="chat-input-wrap">
-        <input type="text" id="msg-input" placeholder="Search coins, buy, short..." autofocus onkeydown="if(event.key==='Enter')sendMsg()">
+        <input type="text" id="msg-input" placeholder="Search coins, buy..." autofocus onkeydown="if(event.key==='Enter')sendMsg()">
         <button id="msg-btn" onclick="sendMsg()">Send</button>
       </div>
     </div>
@@ -765,7 +765,7 @@ function scrollChat(){chatMsgs.scrollTop=chatMsgs.scrollHeight}
 
 function clearChat(){
   chatMsgs.innerHTML='';
-  addChat('bot','✦ Try: "find ai trades" · "buy SOL" · "short ETH"');
+  addChat('bot','✦ Try: "find ai trades" · "buy SOL"');
 }
 
 // ─── DASHBOARD REFRESH ───
@@ -840,14 +840,14 @@ async function refresh(){
       if(openTrades.length){
         h+='<div style="font-size:9px;color:var(--accent-green);font-weight:600;margin-bottom:4px">● OPEN ('+openTrades.length+')</div>';
         [...openTrades].reverse().slice(0,4).forEach(t=>{
-          const side=(t.side==='long'||t.side==='buy')?'long':'short';
+          const side='long';
           h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':'-'}${Math.abs(t.pnl).toFixed(2)}</span></div>`;
         });
       }
       if(closedTrades.length){
         h+='<div style="font-size:9px;color:var(--text-muted);font-weight:600;margin:4px 0">CLOSED</div>';
         [...closedTrades].reverse().slice(0,5).forEach(t=>{
-          const side=(t.side==='long'||t.side==='buy')?'long':'short';
+          const side='long';
           const exitInfo=t.exit_price?' → '+fmtPrice(t.exit_price):'';
           h+=`<div class="trade-row"><span class="trade-side ${side}">${side.toUpperCase()}</span><span class="trade-sym">${t.symbol.replace('USDT','')}</span><span class="trade-price">${fmtPrice(t.price)}${exitInfo}</span><span class="trade-pnl ${t.pnl>=0?'pos':'neg'}">${t.pnl>=0?'+':'-'}$${Math.abs(t.pnl).toFixed(2)}</span><span class="trade-status">CLOSED</span></div>`;
         });
