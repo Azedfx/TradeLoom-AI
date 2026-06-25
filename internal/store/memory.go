@@ -230,6 +230,23 @@ func (s *MemoryStore) LogTrade(symbol, side string, size, price, pnl float64, st
 	s.appendToLog(t)
 }
 
+func (s *MemoryStore) UpdateTradeTPSL(id string, tp, sl float64) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for i := range s.trades {
+		if s.trades[i].ID == id {
+			if tp > 0 {
+				s.trades[i].TakeProfit = tp
+			}
+			if sl > 0 {
+				s.trades[i].StopLoss = sl
+			}
+			s.persist()
+			return
+		}
+	}
+}
+
 func (s *MemoryStore) appendToLog(t models.Trade) {
 	if s.logFile == nil {
 		return

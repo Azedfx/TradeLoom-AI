@@ -14,4 +14,6 @@ func RegisterRoutes(r *gin.Engine, h *StrategyHandler) {
 	r.GET("/brief", h.MarketBrief)
 	r.GET("/news", h.MarketNews)
 	r.POST("/quick-execute", h.QuickExecute)
+	r.POST("/close-trade", h.CloseTradeHandler)
+	r.POST("/update-tpsl", h.UpdateTPSLHandler)
 }

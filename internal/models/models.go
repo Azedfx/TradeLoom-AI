@@ -52,6 +52,8 @@ type Trade struct {
 	ExitPrice      float64   `json:"exit_price"`
 	Status         string    `json:"status"` // "OPEN", "CLOSED"
 	BalanceChange  float64   `json:"balance_change"` // change to account balance on this trade
+	TakeProfit     float64   `json:"take_profit"`
+	StopLoss       float64   `json:"stop_loss"`
 	CreatedAt      time.Time `json:"created_at"`
 }
 

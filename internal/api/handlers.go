@@ -1006,3 +1006,60 @@ func (h *StrategyHandler) handleTrade(prompt string, side string, c *gin.Context
 		"conversation": h.store.GetConversation(),
 	})
 }
+
+func (h *StrategyHandler) CloseTradeHandler(c *gin.Context) {
+	var req struct {
+		ID        string  `json:"id"`
+		ExitPrice float64 `json:"exit_price"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || req.ID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "trade id required"})
+		return
+	}
+
+	trades := h.store.GetAllTrades()
+	var trade *models.Trade
+	for _, t := range trades {
+		if t.ID == req.ID {
+			trade = &t
+			break
+		}
+	}
+	if trade == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "trade not found"})
+		return
+	}
+
+	exitPrice := req.ExitPrice
+	if exitPrice <= 0 {
+		tech, err := h.marketData.GetTechnicalIndicators(trade.Symbol)
+		if err == nil {
+			exitPrice = tech.LastPrice
+		} else {
+			exitPrice = trade.Price
+		}
+	}
+
+	pnl := (exitPrice - trade.Price) * trade.Size
+	if trade.Side == "short" {
+		pnl = (trade.Price - exitPrice) * trade.Size
+	}
+	h.store.CloseTrade(req.ID, exitPrice, pnl)
+	h.store.AddChatMessage("assistant", fmt.Sprintf("✅ Closed %s %s at $%.2f (PnL: $%.2f)", trade.Symbol, trade.Side, exitPrice, pnl))
+
+	c.JSON(http.StatusOK, gin.H{"status": "closed", "pnl": pnl, "exit_price": exitPrice})
+}
+
+func (h *StrategyHandler) UpdateTPSLHandler(c *gin.Context) {
+	var req struct {
+		ID         string  `json:"id"`
+		TakeProfit float64 `json:"take_profit"`
+		StopLoss   float64 `json:"stop_loss"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || req.ID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "trade id required"})
+		return
+	}
+	h.store.UpdateTradeTPSL(req.ID, req.TakeProfit, req.StopLoss)
+	c.JSON(http.StatusOK, gin.H{"status": "updated"})
+}
