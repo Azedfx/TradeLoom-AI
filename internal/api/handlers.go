@@ -346,6 +346,26 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 		}
 	}
 
+	var trendingPrices []map[string]interface{}
+	if trendRaw, err := h.mcpClient.CryptoMarket("trending", nil); err == nil {
+		var coins []map[string]interface{}
+		if json.Unmarshal(trendRaw, &coins) == nil {
+			for _, c := range coins {
+				sym, _ := c["symbol"].(string)
+				priceStr, _ := c["price"].(string)
+				chgStr, _ := c["change24h"].(string)
+				var price, chg float64
+				fmt.Sscanf(priceStr, "%f", &price)
+				fmt.Sscanf(chgStr, "%f", &chg)
+				trendingPrices = append(trendingPrices, map[string]interface{}{
+					"symbol":    sym,
+					"last":      price,
+					"change24h": chg,
+				})
+			}
+		}
+	}
+
 	if isJSONRequest(c) {
 		c.JSON(http.StatusOK, gin.H{
 			"strategies":      strategies,
@@ -360,6 +380,7 @@ func (h *StrategyHandler) Dashboard(c *gin.Context) {
 			"opportunities":   opps,
 			"lastPrompt":      lastPrompt,
 			"account_balance": h.store.AccountBalance,
+			"trending_prices": trendingPrices,
 			"risk_policy": gin.H{
 				"default_capital":   h.defaultCapital,
 				"max_risk_percent": h.maxRiskPercent,

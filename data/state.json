@@ -1,120 +1,25 @@
 {
   "last_opportunities": [
     {
-      "symbol": "XRP",
-      "decision": "NO_TRADE",
-      "confidence": 26,
-      "sentiment_score": 10,
-      "tech_score": 5,
-      "volume_score": 5,
-      "news_score": 3,
-      "macro_score": 3,
-      "reasoning": "Confidence Score: 26/100 → Decision: NO_TRADE\nTechnical: +5 (SMA7 is deeply below SMA25 indicating heavy bearish pressure; MACD lacks bullish cross and RSI is missing, eliminating oversold bounce validation.)\nSentiment: +10 (Fear \u0026 Greed at ~54/100 reflects complacent neutrality, lacking the extreme fear contrarian buy zone or greed divergence signals.)\nVolume: +5 (1.08x relative volume shows baseline participation without smart money accumulation or decisive distribution breaks.)\nNews: +3 (Zero reported structural catalysts or narrative shifts to justify overriding technical and macro headwinds.)\nMacro: +3 (Risk-off baseline (0) suppresses broad market liquidity and crypto risk appetite, favoring capital preservation.)\nSkill Hub Synthesis: Deeply inverted moving average structure (SMA7 \u003c\u003c SMA25) confirms a severe downtrend, while missing RSI data and a risk-off macro reading (0) prevent reliable reversal or breakout confirmation. Neutral sentiment (~54 F\u0026G), absent news catalysts, and unremarkable volume flows offer no structural edge for directional exposure.",
-      "price": 1.0797,
-      "trend": "bearish",
-      "rsi": 44.41398217957506,
-      "macd": "Bearish Cross ↓",
-      "change24h": "-2.34%"
+      "symbol": "SOL",
+      "decision": "BUY",
+      "confidence": 56,
+      "sentiment_score": 15,
+      "tech_score": 17,
+      "volume_score": 13,
+      "news_score": 10,
+      "macro_score": 8,
+      "reasoning": "Confidence Score: 56/100 → Decision: BUY\nTechnical: +17 (Bullish MACD cross and neutral RSI (55.2) show constructive momentum, but price below SMA7/SMA25 reflects short-term consolidation rather than confirmed trend reversal.)\nSentiment: +15 (F\u0026G at 56 and flat 0.56 sentiment indicate a balanced market with no extreme fear/greed divergence to signal high-probability contrarian setups.)\nVolume: +13 (101M absolute volume provides adequate liquidity, but without average volume context, it lacks clear smart money accumulation signals to confirm breakout strength.)\nNews: +10 (No structural catalysts or narrative drivers are available to validate immediate directional momentum or price discovery.)\nMacro: +8 (Current risk-on backdrop favors crypto longs and reduces systemic downside pressure, providing a supportive tailwind for speculative positions.)\nSkill Hub Synthesis: MACD bullish cross and neutral RSI suggest early upside momentum, though price consolidating just below key moving averages indicates caution. A broad risk-on macro environment supports long positioning, while neutral sentiment and absent news catalysts warrant measured exposure.",
+      "price": 69.13,
+      "trend": "neutral",
+      "rsi": 55.23085914669783,
+      "macd": "Neutral",
+      "change24h": "-0.45%"
     }
   ],
-  "last_prompt": "short XRP",
-  "account_balance": 959.8792849896839,
+  "last_prompt": "check SOL",
+  "account_balance": 921.8680653040925,
   "conversation": [
-    {
-      "role": "user",
-      "content": "check for ONDO",
-      "time": "10:05:48"
-    },
-    {
-      "role": "assistant",
-      "content": "🟡 SOL — WATCHLIST 50/100\n   bullish trend · RSI 67 · 24h 2.10% · Vol 50\n   strong technicals · volume growing\n🔴 CARDS — NO_TRADE 30/100\n   neutral trend · RSI 63 · 24h 2.00% · Vol 30\n🔴 BTC — NO_TRADE 25/100\n   bearish trend · RSI 57 · 24h 0.80% · Vol 25\n   volume growing\n🔴 SLX — NO_TRADE 10/100\n   bearish trend · RSI 31 · 24h -3.00% · Vol 10\n🔴 ARX — NO_TRADE 10/100\n   bearish trend · RSI 27 · 24h -1.00% · Vol 10\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
-      "time": "10:05:54"
-    },
-    {
-      "role": "user",
-      "content": "buy SOL",
-      "time": "10:08:50"
-    },
-    {
-      "role": "assistant",
-      "content": "💰 Buying SOL\nPrice: $150.42\nPosition: 0.1303 SOL ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n⚠️  Warnings:\n  - Confidence is moderate (50/100) — WATCHLIST\n\nProceed anyway? Say \"confirm buy SOL\"\n",
-      "time": "10:08:51"
-    },
-    {
-      "role": "user",
-      "content": "confirm buy SOL",
-      "time": "10:09:00"
-    },
-    {
-      "role": "assistant",
-      "content": "💰 Buying SOL\nPrice: $150.29\nPosition: 0.1304 SOL ($19.60)\nRisk: $19.60 (2% of $980 capital)\n\n✅ Order placed!\nSOL Trend: bullish\nRSI: 75\nVolume: $1200000000\n\nMonitoring. Auto TP at +5%, SL at -2%.",
-      "time": "10:09:01"
-    },
-    {
-      "role": "user",
-      "content": "check for ONDO",
-      "time": "10:18:10"
-    },
-    {
-      "role": "assistant",
-      "content": "🔴 BTC — NO_TRADE 45/100\n   bullish trend · RSI 57 · 24h 0.80% · Vol 45\n   strong technicals · volume growing\n🔴 ARX — NO_TRADE 35/100\n   bullish trend · RSI 65 · 24h -1.00% · Vol 35\n   strong technicals\n🔴 SOL — NO_TRADE 30/100\n   bearish trend · RSI 26 · 24h 2.10% · Vol 30\n   volume growing\n🔴 CARDS — NO_TRADE 25/100\n   neutral trend · RSI 50 · 24h 2.00% · Vol 25\n🔴 SLX — NO_TRADE 20/100\n   neutral trend · RSI 58 · 24h -3.00% · Vol 20\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
-      "time": "10:18:16"
-    },
-    {
-      "role": "user",
-      "content": "check for ONDO",
-      "time": "10:18:41"
-    },
-    {
-      "role": "assistant",
-      "content": "🔴 ONDO — NO_TRADE 10/100\n   bearish trend · RSI 53 · 24h -5.00% · Vol 10\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
-      "time": "10:19:03"
-    },
-    {
-      "role": "user",
-      "content": "check BTC",
-      "time": "10:36:23"
-    },
-    {
-      "role": "user",
-      "content": "check BTC",
-      "time": "10:37:01"
-    },
-    {
-      "role": "assistant",
-      "content": "🔴 BTC — NO_TRADE 15/100\n   neutral trend · RSI 43 · 24h 0.32% · Vol 15\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
-      "time": "10:37:04"
-    },
-    {
-      "role": "assistant",
-      "content": "🔴 BTC — NO_TRADE 15/100\n   neutral trend · RSI 43 · 24h 0.32% · Vol 15\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
-      "time": "10:37:13"
-    },
-    {
-      "role": "user",
-      "content": "buy BTC",
-      "time": "14:45:54"
-    },
-    {
-      "role": "assistant",
-      "content": "💰 Buying BTC\nPrice: $61455.00\nPosition: 0.0003 BTC ($19.59)\nRisk: $19.59 (2% of $980 capital)\n\n⚠️  Warnings:\n  - Confidence is low (10/100)\n  - Trend is neutral (not ideal for long)\n\nProceed anyway? Say \"confirm buy BTC\"\n",
-      "time": "14:45:59"
-    },
-    {
-      "role": "user",
-      "content": "confirm buy BTC",
-      "time": "14:46:03"
-    },
-    {
-      "role": "assistant",
-      "content": "💰 Buying BTC\nPrice: $61455.00\nPosition: 0.0003 BTC ($19.59)\nRisk: $19.59 (2% of $980 capital)\n\n✅ Order placed!\nBTC Trend: neutral\nRSI: 37\nVolume: $0\n\nMonitoring. Auto TP at +5%, SL at -2%.",
-      "time": "14:46:06"
-    },
-    {
-      "role": "user",
-      "content": "check BTC",
-      "time": "15:00:43"
-    },
     {
       "role": "assistant",
       "content": "🟡 BTC — WATCHLIST 40/100\n   neutral trend · RSI 46 · 24h -1.85% · Vol 20\n   bullish sentiment\n\nSay \"buy \u003ccoin\u003e\" or \"short \u003ccoin\u003e\" to trade",
@@ -269,6 +174,101 @@
       "role": "user",
       "content": "check BTC",
       "time": "19:57:02"
+    },
+    {
+      "role": "user",
+      "content": "buy XRP",
+      "time": "08:48:38"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying XRP\nPrice: $1.09\nPosition: 17.6676 XRP ($19.20)\nRisk: $19.20 (2% of $960 capital)\n\n⚠️  Warnings:\n  - Confidence is moderate (42/100) — WATCHLIST\n  - Trend is bearish (not ideal for long)\n\nProceed anyway? Say \"confirm buy XRP\"\n",
+      "time": "08:49:26"
+    },
+    {
+      "role": "user",
+      "content": "buy SOL",
+      "time": "09:07:30"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $69.28\nPosition: 0.2771 SOL ($19.20)\nRisk: $19.20 (2% of $960 capital)\n\n⚠️  Warnings:\n  - Trend is neutral (not ideal for long)\n\nProceed anyway? Say \"confirm buy SOL\"\n",
+      "time": "09:08:24"
+    },
+    {
+      "role": "user",
+      "content": "confirm buy SOL",
+      "time": "09:08:30"
+    },
+    {
+      "role": "user",
+      "content": "confirm buy SOL",
+      "time": "09:09:11"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $69.28\nPosition: 0.2771 SOL ($19.20)\nRisk: $19.20 (2% of $960 capital)\n\n✅ Order placed!\nSOL Trend: neutral\nRSI: 55\nVolume: $101225316\n\nMonitoring. Auto TP at +5%, SL at -2%.",
+      "time": "09:09:53"
+    },
+    {
+      "role": "assistant",
+      "content": "💰 Buying SOL\nPrice: $69.27\nPosition: 0.2716 SOL ($18.81)\nRisk: $18.81 (2% of $941 capital)\n\n✅ Order placed!\nSOL Trend: neutral\nRSI: 55\nVolume: $101243071\n\nMonitoring. Auto TP at +5%, SL at -2%.",
+      "time": "09:10:08"
+    },
+    {
+      "role": "user",
+      "content": "check SUI",
+      "time": "09:11:21"
+    },
+    {
+      "role": "user",
+      "content": "check SUI",
+      "time": "09:11:23"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 SUI — WATCHLIST 60/100\n   bearish trend · RSI 43 · 24h -0.53% · Vol 16\n   bullish sentiment · positive narrative\n\nSay \"buy \u003ccoin\u003e\" to trade",
+      "time": "09:12:52"
+    },
+    {
+      "role": "assistant",
+      "content": "🟡 SUI — WATCHLIST 38/100\n   bearish trend · RSI 43 · 24h -0.53% · Vol 18\n   bullish sentiment · positive narrative\n\nSay \"buy \u003ccoin\u003e\" to trade",
+      "time": "09:13:07"
+    },
+    {
+      "role": "user",
+      "content": "check RMU",
+      "time": "09:13:58"
+    },
+    {
+      "role": "assistant",
+      "content": "🟢 RMU — BUY 70/100\n   bullish trend · RSI 74 · 24h 11.76% · Vol 39\n   bullish sentiment · strong technicals · volume growing · positive narrative\n\nSay \"buy \u003ccoin\u003e\" to trade",
+      "time": "09:15:36"
+    },
+    {
+      "role": "user",
+      "content": "check SOL",
+      "time": "09:17:52"
+    },
+    {
+      "role": "assistant",
+      "content": "🟢 SOL — BUY 62/100\n   neutral trend · RSI 55 · 24h -0.35% · Vol 28\n   bullish sentiment · volume growing · positive narrative\n\nSay \"buy \u003ccoin\u003e\" to trade",
+      "time": "09:19:07"
+    },
+    {
+      "role": "user",
+      "content": "check BTC",
+      "time": "09:26:03"
+    },
+    {
+      "role": "user",
+      "content": "check SOL",
+      "time": "09:30:04"
+    },
+    {
+      "role": "assistant",
+      "content": "🟢 SOL — BUY 56/100\n   neutral trend · RSI 55 · 24h -0.45% · Vol 30\n   bullish sentiment · volume growing · positive narrative\n\nSay \"buy \u003ccoin\u003e\" to trade",
+      "time": "09:31:19"
     }
   ],
   "trades": [
@@ -331,6 +331,30 @@
       "status": "OPEN",
       "balance_change": -19.200280872045024,
       "created_at": "2026-06-24T16:29:15.867418+01:00"
+    },
+    {
+      "id": "20260625090953",
+      "symbol": "SOLUSDT",
+      "side": "buy",
+      "size": 0.27710141021642143,
+      "price": 69.28,
+      "pnl": 0,
+      "exit_price": 0,
+      "status": "OPEN",
+      "balance_change": -19.197585699793677,
+      "created_at": "2026-06-25T09:09:53.546748+01:00"
+    },
+    {
+      "id": "20260625091008",
+      "symbol": "SOLUSDT",
+      "side": "buy",
+      "size": 0.27159858504111173,
+      "price": 69.27,
+      "pnl": 0,
+      "exit_price": 0,
+      "status": "OPEN",
+      "balance_change": -18.813633985797807,
+      "created_at": "2026-06-25T09:10:08.502153+01:00"
     }
   ],
   "decision_log": [
@@ -1015,6 +1039,61 @@
       "volume": 5,
       "news": 3,
       "macro": 3
+    },
+    {
+      "time": "2026-06-25T09:12:52.111669+01:00",
+      "symbol": "SUI",
+      "total": 60,
+      "decision": "WATCHLIST",
+      "sentiment": 12,
+      "technical": 8,
+      "volume": 8,
+      "news": 10,
+      "macro": 6
+    },
+    {
+      "time": "2026-06-25T09:13:07.021715+01:00",
+      "symbol": "SUI",
+      "total": 38,
+      "decision": "WATCHLIST",
+      "sentiment": 14,
+      "technical": 8,
+      "volume": 10,
+      "news": 10,
+      "macro": 5
+    },
+    {
+      "time": "2026-06-25T09:15:36.224132+01:00",
+      "symbol": "RMU",
+      "total": 70,
+      "decision": "BUY",
+      "sentiment": 16,
+      "technical": 24,
+      "volume": 15,
+      "news": 10,
+      "macro": 8
+    },
+    {
+      "time": "2026-06-25T09:19:07.048777+01:00",
+      "symbol": "SOL",
+      "total": 62,
+      "decision": "BUY",
+      "sentiment": 15,
+      "technical": 16,
+      "volume": 12,
+      "news": 10,
+      "macro": 9
+    },
+    {
+      "time": "2026-06-25T09:31:19.556271+01:00",
+      "symbol": "SOL",
+      "total": 56,
+      "decision": "BUY",
+      "sentiment": 15,
+      "technical": 17,
+      "volume": 13,
+      "news": 10,
+      "macro": 8
     }
   ]
 }

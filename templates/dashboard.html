@@ -82,6 +82,40 @@ body{
 .balance-value{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
 .balance-value .currency{font-size:14px;color:var(--text-secondary);font-weight:500}
 
+/* ─── CAPABILITIES BAR ─── */
+.cap-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 16px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  flex-shrink:0;
+  overflow-x:auto;
+  flex-wrap:nowrap;
+}
+.cap-bar .cap-label{
+  font-size:9px;font-weight:600;color:var(--accent-cyan);
+  text-transform:uppercase;letter-spacing:0.5px;
+  white-space:nowrap;flex-shrink:0;
+  margin-right:4px;
+}
+.cap-bar .cap-item{
+  display:flex;align-items:center;gap:4px;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:9px;color:var(--text-secondary);
+  background:var(--bg-secondary);
+  white-space:nowrap;
+  border:1px solid transparent;
+  transition:all 0.2s ease;
+  flex-shrink:0;
+}
+.cap-bar .cap-item:hover{
+  background:var(--bg-elevated);
+  border-color:var(--border-light);
+  color:var(--text-primary);
+}
+
 /* ─── EXECUTION FLOW ─── */
 .exec-flow{
   display:flex;align-items:center;gap:0;
@@ -485,6 +519,17 @@ body{
       </div>
     </div>
   </header>
+
+  <!-- Capabilities Bar -->
+  <div class="cap-bar">
+    <span class="cap-label">TradeLoom AI</span>
+    <span class="cap-item">📈 Technical patterns & momentum</span>
+    <span class="cap-item">🧠 Crowd sentiment & positioning</span>
+    <span class="cap-item">🐋 Whale flow & on-chain moves</span>
+    <span class="cap-item">📰 News & narrative synthesis</span>
+    <span class="cap-item">🏛️ Macro & economic context</span>
+    <span class="cap-item">⚡ Confidence-weighted trade signals</span>
+  </div>
 
   <!-- Execution Flow -->
   <div class="exec-flow" id="exec-flow">
@@ -941,7 +986,7 @@ async function loadTrending(){
 }
 
 // ─── INIT ───
-addChat('bot','✦ Try: "find ai trades" · "buy SOL" · "short ETH"');
+addChat('bot','✦ Try: "find ai trades" · "buy SOL"');
 refresh();
 loadNews();
 loadFG();
